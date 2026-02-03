@@ -858,24 +858,27 @@
         /* Values Section - Adaptive Theme */
         .values-section {
             padding: 140px 0;
-            background: var(--bg-elevated);
+            background: var(--bg);
             position: relative;
             overflow: hidden;
             transition: background 0.5s ease;
         }
 
-        [data-theme="light"] .values-section {
-            background: #F8F7F4;
-        }
-
+        /* Gradient mesh background for visual interest */
         .values-section::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(137, 82, 253, 0.3), rgba(71, 235, 235, 0.3), transparent);
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(137, 82, 253, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(71, 235, 235, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .values-section::before {
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(137, 82, 253, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(71, 235, 235, 0.1) 0%, transparent 50%);
         }
 
         .values-section .section-label {
@@ -889,105 +892,116 @@
         .values-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-            background: var(--bg-card);
-            transition: all 0.5s ease;
-        }
-
-        [data-theme="light"] .values-grid {
-            border-color: #E5E5E5;
-            background: #FFFFFF;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         @media (max-width: 900px) {
             .values-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
         }
 
         .value-card {
-            padding: 48px 40px;
+            padding: 48px 36px;
             position: relative;
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            background: var(--bg-card);
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
         }
 
         [data-theme="light"] .value-card {
-            background: #FFFFFF;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                0 1px 2px rgba(0, 0, 0, 0.04);
         }
 
-        .value-card:not(:last-child) {
-            border-right: 1px solid var(--border);
-        }
-
-        [data-theme="light"] .value-card:not(:last-child) {
-            border-right-color: #E5E5E5;
-        }
-
-        @media (max-width: 900px) {
-            .value-card:not(:last-child) {
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-
-            [data-theme="light"] .value-card:not(:last-child) {
-                border-bottom-color: #E5E5E5;
-            }
-        }
-
+        /* Gradient border accent on left */
         .value-card::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 40px;
-            right: 40px;
-            height: 3px;
+            top: 24px;
+            bottom: 24px;
+            left: 0;
+            width: 3px;
             background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            border-radius: 0 3px 3px 0;
+            opacity: 0.6;
+            transition: all 0.4s ease;
+        }
+
+        /* Subtle inner glow */
+        .value-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(137, 82, 253, 0.04) 0%, transparent 100%);
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        [data-theme="light"] .value-card::after {
+            background: linear-gradient(180deg, rgba(137, 82, 253, 0.06) 0%, transparent 100%);
         }
 
         .value-card:hover {
-            background: var(--bg-elevated);
+            transform: translateY(-4px);
+            border-color: rgba(137, 82, 253, 0.3);
+            box-shadow:
+                0 12px 40px rgba(137, 82, 253, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="light"] .value-card:hover {
-            background: #FAFAFA;
+            border-color: rgba(137, 82, 253, 0.25);
+            box-shadow:
+                0 12px 40px rgba(137, 82, 253, 0.12),
+                0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         .value-card:hover::before {
-            transform: scaleX(1);
+            opacity: 1;
+            top: 16px;
+            bottom: 16px;
         }
 
         .value-number {
             font-family: 'Inter', sans-serif;
-            font-size: 72px;
+            font-size: 80px;
             font-weight: 800;
             line-height: 1;
-            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 24px;
-            transition: all 0.5s ease;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+            transition: all 0.4s ease;
         }
 
         [data-theme="light"] .value-number {
-            background: linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 100%);
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .value-card:hover .value-number {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            opacity: 1;
+            transform: scale(1.02);
         }
 
         .value-card h4 {
@@ -997,12 +1011,16 @@
             color: var(--text-primary);
             margin-bottom: 16px;
             letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
         }
 
         .value-card p {
             font-size: 15px;
             color: var(--text-secondary);
             line-height: 1.75;
+            position: relative;
+            z-index: 1;
         }
 
         .value-tag {
@@ -1011,15 +1029,31 @@
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--purple);
-            background: rgba(137, 82, 253, 0.1);
+            color: var(--cyan);
+            background: rgba(71, 235, 235, 0.1);
+            border: 1px solid rgba(71, 235, 235, 0.2);
             padding: 6px 12px;
             border-radius: 100px;
             margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
         }
 
         [data-theme="light"] .value-tag {
+            color: var(--purple);
             background: rgba(137, 82, 253, 0.08);
+            border-color: rgba(137, 82, 253, 0.2);
+        }
+
+        .value-card:hover .value-tag {
+            background: rgba(71, 235, 235, 0.15);
+            border-color: rgba(71, 235, 235, 0.3);
+        }
+
+        [data-theme="light"] .value-card:hover .value-tag {
+            background: rgba(137, 82, 253, 0.12);
+            border-color: rgba(137, 82, 253, 0.3);
         }
 
         /* CTA Section */
