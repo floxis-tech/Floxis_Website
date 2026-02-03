@@ -181,13 +181,13 @@
         }
 
         nav.scrolled .nav-wrapper {
-            max-width: 900px;
+            max-width: 1000px;
             background: var(--nav-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 10px 20px;
+            padding: 10px 24px;
         }
 
         /* Theme Toggle */
@@ -1201,70 +1201,319 @@
             padding: 16px 24px;
         }
 
-        /* Footer */
-        footer {
-            padding: 48px 0;
-            border-top: 1px solid var(--border);
-            transition: border-color 0.5s ease;
+        /* Who It's For Section */
+        .audience-section {
+            padding: 140px 0;
+            background: var(--bg-elevated);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
         }
 
-        .footer-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        [data-theme="light"] .audience-section {
+            background: #F8F7F4;
         }
 
-        @media (max-width: 768px) {
-            .footer-inner {
-                flex-direction: column;
-                gap: 24px;
-                text-align: center;
+        .audience-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(71, 235, 235, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 50% at 20% 80%, rgba(137, 82, 253, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 900px) {
+            .audience-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
         }
 
-        .footer-logo {
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: var(--text-primary);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 32px;
-        }
-
-        .footer-links a {
-            font-size: 14px;
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .audience-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
             position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .footer-links a::after {
+        [data-theme="light"] .audience-card {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Gradient top border */
+        .audience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            opacity: 0.7;
+            transition: opacity 0.4s ease;
+        }
+
+        .audience-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(137, 82, 253, 0.2);
+            box-shadow: 0 16px 48px rgba(137, 82, 253, 0.12);
+        }
+
+        [data-theme="light"] .audience-card:hover {
+            box-shadow: 0 16px 48px rgba(137, 82, 253, 0.1);
+        }
+
+        .audience-card:hover::before {
+            opacity: 1;
+        }
+
+        .audience-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .audience-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .audience-card .btn-ghost {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            padding: 0;
+        }
+
+        .audience-card .btn-ghost:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0 0 0;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Subtle cross/plus pattern background */
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at center, var(--text-dim) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        [data-theme="light"] footer::before {
+            opacity: 0.25;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 80px;
+            align-items: end;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 900px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-col-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .footer-col a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            width: fit-content;
+        }
+
+        .footer-col a::after {
             content: '';
             position: absolute;
             bottom: -2px;
             left: 0;
             width: 0;
             height: 1px;
-            background: var(--gradient);
+            background: var(--accent);
             transition: width 0.3s ease;
         }
 
-        .footer-links a:hover {
-            color: var(--text-primary);
+        .footer-col a:hover {
+            color: var(--accent);
         }
 
-        .footer-links a:hover::after {
+        .footer-col a:hover::after {
             width: 100%;
+        }
+
+        /* Large logo section */
+        .footer-brand {
+            position: relative;
+        }
+
+        .footer-logo-large {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(64px, 12vw, 140px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.9;
+            user-select: none;
+        }
+
+        [data-theme="light"] .footer-logo-large {
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (max-width: 900px) {
+            .footer-brand {
+                order: -1;
+            }
+        }
+
+        /* Bottom bar with ticker */
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         .footer-copy {
             font-size: 13px;
             color: var(--text-dim);
+        }
+
+        .footer-ticker {
+            flex: 1;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+
+        .footer-ticker-inner {
+            display: flex;
+            gap: 32px;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .footer-ticker-inner span {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .footer-ticker-inner span::after {
+            content: '•';
+            color: var(--accent);
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--text-primary);
         }
 
         /* Mobile nav */
@@ -1326,6 +1575,7 @@
                     <ul class="nav-links">
                         <li><a href="#stack">How It Works</a></li>
                         <li><a href="#values">Why Floxis</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                         <li><a href="#cta">Contact</a></li>
                     </ul>
                     <div class="nav-actions">
@@ -1481,6 +1731,48 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section class="audience-section" id="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">FAQ</p>
+                <h2 class="section-title">Who Is Floxis For?</h2>
+            </div>
+            <div class="audience-grid">
+                <div class="audience-card fade-in">
+                    <h4>Publishers</h4>
+                    <p>Unlock incremental server-side demand without replacing your existing stack or workflows. Maintain full control over your monetization strategy.</p>
+                    <a href="#cta" class="btn btn-ghost">
+                        <span>Schedule a Consultation</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="audience-card fade-in">
+                    <h4>Agencies</h4>
+                    <p>Activate server-side bidding for clients without introducing operational risk or complexity. Seamless integration with existing tech stacks.</p>
+                    <a href="#cta" class="btn btn-ghost">
+                        <span>Get in Touch</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="audience-card fade-in">
+                    <h4>Ad Networks</h4>
+                    <p>Expand demand access and yield while maintaining full control over integrations and trade logic. No vendor lock-in, ever.</p>
+                    <a href="#cta" class="btn btn-ghost">
+                        <span>Talk to Us</span>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA & Contact Section -->
     <section class="cta-section" id="cta">
         <div class="container">
@@ -1550,15 +1842,52 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-inner">
-                <span class="footer-logo">FLOXIS</span>
-                <div class="footer-links">
-                    <a href="#stack">How It Works</a>
-                    <a href="#">About</a>
-                    <a href="#cta">Contact</a>
-                    <a href="#">Privacy</a>
+            <div class="footer-content">
+                <!-- Logo + Links side by side -->
+                <div class="footer-main">
+                    <!-- Large brand logo on left -->
+                    <div class="footer-brand">
+                        <span class="footer-logo-large">FLOXIS</span>
+                    </div>
+
+                    <!-- Three column links on right -->
+                    <div class="footer-grid">
+                        <div class="footer-col">
+                            <span class="footer-col-label">Navigate</span>
+                            <a href="#stack">How It Works</a>
+                            <a href="#values">Why Floxis</a>
+                            <a href="#cta">Contact Us</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-label">Get In Touch</span>
+                            <a href="mailto:hello@floxis.io">hello@floxis.io</a>
+                            <a href="#cta">Request Demo</a>
+                        </div>
+                    </div>
                 </div>
-                <p class="footer-copy">© 2025 Floxis</p>
+
+                <!-- Bottom bar -->
+                <div class="footer-bottom">
+                    <p class="footer-copy">© 2026 Floxis. All rights reserved.</p>
+                    <div class="footer-ticker">
+                        <div class="footer-ticker-inner">
+                            <span>Server-Side Infrastructure</span>
+                            <span>Publisher-Controlled</span>
+                            <span>oRTB & Prebid Server</span>
+                            <span>Zero Latency</span>
+                            <span>No Lock-In</span>
+                            <span>Server-Side Infrastructure</span>
+                            <span>Publisher-Controlled</span>
+                            <span>oRTB & Prebid Server</span>
+                            <span>Zero Latency</span>
+                            <span>No Lock-In</span>
+                        </div>
+                    </div>
+                    <div class="footer-legal">
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
