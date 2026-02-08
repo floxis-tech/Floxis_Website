@@ -588,14 +588,70 @@
 
         .layer-diagram-connector {
             display: flex;
-            justify-content: center;
-            padding: 0;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+            position: relative;
         }
 
         .layer-diagram-connector-line {
-            width: 1.5px;
+            width: 2px;
             height: 32px;
-            background: var(--text-dim);
+            background: linear-gradient(to top, var(--text-dim), rgba(92, 92, 102, 0.3));
+            position: relative;
+            overflow: visible;
+        }
+
+        .layer-diagram-connector-line::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: flowUp 2s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .layer-diagram-connector:first-of-type .layer-diagram-connector-line::before {
+            animation-delay: 0s;
+        }
+
+        .layer-diagram-connector:last-of-type .layer-diagram-connector-line::before {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes flowUp {
+            0% {
+                bottom: -4px;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                bottom: calc(100% - 4px);
+                opacity: 0;
+            }
+        }
+
+        .layer-diagram-connector-line::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 6px solid var(--text-dim);
         }
 
         .layer-diagram-caption {
