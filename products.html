@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products — Floxis | Server-Side Monetization Infrastructure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan: #47EBEB;
+            --cyan-light: #87FFFF;
+            --cyan-dark: #00B8B9;
+            --purple: #8952FD;
+            --purple-light: #9F75F9;
+            --purple-dark: #632CDA;
+            --gradient: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
+            --glow-cyan: rgba(71, 235, 235, 0.15);
+            --glow-purple: rgba(137, 82, 253, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --bg: #07060D;
+            --bg-elevated: #0E0D15;
+            --bg-card: #12111A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94949E;
+            --text-dim: #5C5C66;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-light: rgba(255, 255, 255, 0.12);
+            --nav-bg: rgba(7, 6, 13, 0.92);
+            --card-bg: #12111A;
+            --input-bg: #07060D;
+            --accent: #47EBEB;
+            --accent-light: #87FFFF;
+            --gradient-text: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
+        }
+
+        [data-theme="light"] {
+            --bg: #FFFFFF;
+            --bg-elevated: #F8F7F4;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-dim: #999999;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-light: rgba(0, 0, 0, 0.12);
+            --nav-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: #FFFFFF;
+            --input-bg: #F5F5F5;
+            --glow-cyan: rgba(71, 235, 235, 0.25);
+            --glow-purple: rgba(137, 82, 253, 0.2);
+            --accent: #8952FD;
+            --accent-light: #9F75F9;
+            --gradient-text: linear-gradient(135deg, #632CDA 0%, #47EBEB 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.5s ease;
+        }
+
+        [data-theme="light"] .bg-grid {
+            opacity: 0.3;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -20%;
+            left: 30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, var(--glow-purple) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-glow-cyan {
+            position: fixed;
+            bottom: -20%;
+            right: 20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(ellipse at center, var(--glow-cyan) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.5s ease;
+        }
+
+        [data-theme="light"] .bg-glow,
+        [data-theme="light"] .bg-glow-cyan {
+            opacity: 0.4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled {
+            padding: 16px 0;
+        }
+
+        .nav-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid transparent;
+            border-radius: 0;
+            padding: 12px 0;
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled .nav-wrapper {
+            max-width: 1000px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 24px;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-cta {
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled .nav-cta {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.6s ease;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+            transition: gap 0.6s ease;
+        }
+
+        nav.scrolled .nav-links {
+            gap: 28px;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s ease;
+            letter-spacing: 0.02em;
+        }
+
+        nav.scrolled .nav-links a {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Nav Dropdown */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-dropdown > a .dropdown-arrow {
+            width: 10px;
+            height: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover > a .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 240px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transform: translateX(-50%) translateY(4px);
+            z-index: 200;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a::after {
+            display: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            color: var(--text-primary);
+            background: rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu a:hover {
+            background: rgba(137, 82, 253, 0.08);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        [data-theme="light"] .btn-primary {
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--glow-cyan), 0 4px 16px var(--glow-purple);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: linear-gradient(135deg, #632CDA 0%, #00B8B9 100%);
+            box-shadow: 0 8px 32px var(--glow-purple), 0 4px 16px var(--glow-cyan);
+        }
+
+        .btn-ghost {
+            color: var(--text-secondary);
+            padding: 12px 0;
+            position: relative;
+        }
+
+        .btn-ghost::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .btn-ghost:hover {
+            color: var(--accent);
+        }
+
+        .btn-ghost:hover::after {
+            width: 100%;
+        }
+
+        .btn-ghost svg {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-ghost:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            padding: 160px 0 100px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 28px;
+            padding: 10px 18px;
+            background: rgba(71, 235, 235, 0.08);
+            border: 1px solid rgba(71, 235, 235, 0.2);
+            border-radius: 100px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: default;
+        }
+
+        .hero-label:hover {
+            background: rgba(71, 235, 235, 0.15);
+            border-color: rgba(71, 235, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(71, 235, 235, 0.2);
+        }
+
+        [data-theme="light"] .hero-label {
+            background: rgba(137, 82, 253, 0.08);
+            border-color: rgba(137, 82, 253, 0.2);
+        }
+
+        [data-theme="light"] .hero-label:hover {
+            background: rgba(137, 82, 253, 0.15);
+            border-color: rgba(137, 82, 253, 0.4);
+            box-shadow: 0 8px 24px rgba(137, 82, 253, 0.2);
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(42px, 5.5vw, 72px);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 680px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section shared styles */
+        .section-header {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            transition: color 0.5s ease;
+        }
+
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        /* ===================== */
+        /* Layer Diagram         */
+        /* ===================== */
+        .diagram-section {
+            padding: 80px 0 100px;
+            position: relative;
+        }
+
+        .layer-diagram {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .layer-diagram-box {
+            text-align: center;
+            padding: 22px 28px;
+            border: 1.5px solid var(--accent);
+            border-radius: 10px;
+            background: var(--bg-elevated);
+        }
+
+        .layer-diagram-box h5 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .layer-diagram-connector {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .layer-diagram-connector-line {
+            width: 1.5px;
+            height: 32px;
+            background: var(--text-dim);
+        }
+
+        .layer-diagram-caption {
+            text-align: center;
+            margin-top: 36px;
+            font-size: 14px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* ===================== */
+        /* Layer Sections        */
+        /* ===================== */
+        .layers-section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+            transition: border-color 0.5s ease;
+        }
+
+        .layer-item {
+            padding: 56px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .layer-item:first-child {
+            padding-top: 0;
+        }
+
+        .layer-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .layer-item-inner {
+            max-width: 680px;
+        }
+
+        .layer-item h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .layer-item p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 60ch;
+        }
+
+        .layer-item .btn-ghost {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            padding: 0;
+        }
+
+        .layer-item .btn-ghost:hover {
+            color: var(--accent);
+        }
+
+        /* ===================== */
+        /* Interoperability      */
+        /* ===================== */
+        .interop-section {
+            padding: 140px 0;
+            background: var(--bg-elevated);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        [data-theme="light"] .interop-section {
+            background: #F8F7F4;
+        }
+
+        .interop-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(137, 82, 253, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(71, 235, 235, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .interop-section::before {
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(137, 82, 253, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(71, 235, 235, 0.1) 0%, transparent 50%);
+        }
+
+        .interop-content {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .interop-content .section-title {
+            margin-bottom: 20px;
+        }
+
+        .interop-text {
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .interop-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: left;
+            max-width: 480px;
+            margin: 0 auto 40px;
+        }
+
+        .interop-list li {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .interop-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            min-width: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 8px;
+        }
+
+        .interop-closing {
+            font-size: 14px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* ===================== */
+        /* Who It's Built For    */
+        /* ===================== */
+        .audience-section {
+            padding: 140px 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+            transition: border-color 0.5s ease;
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .audience-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+        }
+
+        .audience-col h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        .audience-col p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-width: 50ch;
+        }
+
+        /* ===================== */
+        /* CTA Section           */
+        /* ===================== */
+        .cta-section {
+            padding: 140px 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+            transition: border-color 0.5s ease;
+        }
+
+        .cta-inner {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-inner .section-title {
+            margin-bottom: 20px;
+        }
+
+        .cta-description {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .cta-small {
+            display: block;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        /* ===================== */
+        /* Footer                */
+        /* ===================== */
+        footer {
+            padding: 100px 0 0 0;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at center, var(--text-dim) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        [data-theme="light"] footer::before {
+            opacity: 0.25;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 80px;
+            align-items: end;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 900px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-col-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .footer-col a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            width: fit-content;
+        }
+
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+
+        .footer-brand {
+            position: relative;
+        }
+
+        .footer-logo-large {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(64px, 12vw, 140px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.9;
+            user-select: none;
+        }
+
+        [data-theme="light"] .footer-logo-large {
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (max-width: 900px) {
+            .footer-brand {
+                order: -1;
+            }
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .footer-ticker {
+            flex: 1;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+
+        .footer-ticker-inner {
+            display: flex;
+            gap: 32px;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .footer-ticker-inner span {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .footer-ticker-inner span::after {
+            content: '\2022';
+            color: var(--accent);
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--text-primary);
+        }
+
+        /* ===================== */
+        /* Mobile nav            */
+        /* ===================== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* ===================== */
+        /* Scroll animations     */
+        /* ===================== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1),
+                        transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in:nth-child(1) { transition-delay: 0s; }
+        .fade-in:nth-child(2) { transition-delay: 0.1s; }
+        .fade-in:nth-child(3) { transition-delay: 0.2s; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-cyan"></div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-inner">
+                    <a href="index.html" class="logo">FLOXIS</a>
+                    <ul class="nav-links">
+                        <li class="nav-dropdown">
+                            <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
+                            <div class="nav-dropdown-menu">
+                                <a href="products.html">Products Overview</a>
+                                <a href="product-ortb.html">oRTB Infrastructure</a>
+                                <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
+                                <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
+                            </div>
+                        </li>
+                        <li><a href="index.html#stack">How It Works</a></li>
+                        <li><a href="index.html#values">Why Floxis</a></li>
+                        <li><a href="index.html#faq">FAQ</a></li>
+                        <li><a href="index.html#cta">Contact</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a href="index.html#cta" class="btn btn-primary nav-cta">
+                            <span>Get Started</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-label">Products</span>
+                <h1>Infrastructure, <em>Not Tools</em></h1>
+                <p class="hero-sub">Floxis provides modular, server-side monetization infrastructure that publishers and ad networks can deploy independently or together — all designed to operate inside existing ad stacks without disrupting control, auctions, or ownership.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layer Diagram -->
+    <section class="diagram-section">
+        <div class="container">
+            <div class="layer-diagram fade-in">
+                <div class="layer-diagram-box">
+                    <h5>Prebid.js Infrastructure</h5>
+                </div>
+                <div class="layer-diagram-connector">
+                    <div class="layer-diagram-connector-line"></div>
+                </div>
+                <div class="layer-diagram-box">
+                    <h5>Prebid Server Infrastructure</h5>
+                </div>
+                <div class="layer-diagram-connector">
+                    <div class="layer-diagram-connector-line"></div>
+                </div>
+                <div class="layer-diagram-box">
+                    <h5>Server-side oRTB Infrastructure</h5>
+                </div>
+            </div>
+            <p class="layer-diagram-caption fade-in">Three infrastructure layers, designed to operate independently or together.</p>
+        </div>
+    </section>
+
+    <!-- Layer Sections -->
+    <section class="layers-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Infrastructure Layers</p>
+                <h2 class="section-title">Three Layers of Server-Side Infrastructure</h2>
+            </div>
+
+            <div class="layer-item fade-in">
+                <div class="layer-item-inner">
+                    <h3>Server-side oRTB Infrastructure</h3>
+                    <p>A foundational server-side layer for managing pricing, routing, and traffic behavior across demand. Floxis' oRTB infrastructure enables publishers and ad networks to control how demand is handled and monetized, while preserving existing ad servers, auction logic, and demand relationships.</p>
+                    <a href="product-ortb.html" class="btn btn-ghost">
+                        Learn more
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="layer-item fade-in">
+                <div class="layer-item-inner">
+                    <h3>Publisher-owned Prebid.js Adapter Infrastructure</h3>
+                    <p>A publisher-operated Prebid.js adapter that works across wrappers and remains fully owned and controlled by the publisher. This infrastructure allows publishers to extend monetization logic beyond the browser, reduce vendor dependency, and operate Prebid.js adapters on their own terms — independent of any single wrapper or demand partner.</p>
+                    <a href="product-prebidjs.html" class="btn btn-ghost">
+                        Learn more
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="layer-item fade-in">
+                <div class="layer-item-inner">
+                    <h3>Server-side Prebid Server Infrastructure</h3>
+                    <p>A fully server-side Prebid Server environment designed for scale, efficiency, and enterprise-grade execution. Floxis enables publishers and networks to operate Prebid Server infrastructure that supports high-volume traffic, centralized governance, and low-latency performance in production environments.</p>
+                    <a href="product-prebid-server.html" class="btn btn-ghost">
+                        Learn more
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interoperability -->
+    <section class="interop-section">
+        <div class="container">
+            <div class="interop-content">
+                <div class="section-header fade-in">
+                    <p class="section-label">Interoperability</p>
+                    <h2 class="section-title">Designed to Work Together — or Independently</h2>
+                </div>
+                <div class="fade-in">
+                    <p class="interop-text">Each Floxis infrastructure layer can be adopted on its own or combined with others, depending on how your monetization stack is structured.</p>
+                    <ul class="interop-list">
+                        <li>Server-side by design</li>
+                        <li>Standards-aligned</li>
+                        <li>Publisher- and network-controlled</li>
+                        <li>Built to integrate with existing ad servers, wrappers, and demand partners</li>
+                    </ul>
+                    <p class="interop-closing">Floxis does not replace core systems — it adds control where it matters.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Floxis Is Built For -->
+    <section class="audience-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-label">Built For</p>
+                <h2 class="section-title">Who Floxis Is Built For</h2>
+            </div>
+
+            <div class="audience-grid fade-in">
+                <div class="audience-col">
+                    <h4>Publishers</h4>
+                    <p>For teams that want greater control over monetization logic, ownership of their integrations, and the flexibility to operate across wrappers and demand sources without vendor lock-in.</p>
+                </div>
+                <div class="audience-col">
+                    <h4>Ad Networks &amp; Enterprises</h4>
+                    <p>For organizations that require scalable, standardized infrastructure to manage monetization across multiple properties, partners, and environments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-inner fade-in">
+                <p class="section-label">Next Steps</p>
+                <h2 class="section-title">Request a Technical Overview</h2>
+                <p class="cta-description">If you're evaluating server-side monetization infrastructure and want to understand how Floxis fits within your existing stack, we're happy to walk through the architecture, integration options, and use cases.</p>
+                <a href="index.html#cta" class="btn btn-primary">
+                    <span>
+                        Request a Technical Overview
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M2 7h10M8 3l4 4-4 4"/>
+                        </svg>
+                    </span>
+                </a>
+                <span class="cta-small">Architecture, integrations, and fit discussion — no sales pitch.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <span class="footer-logo-large">FLOXIS</span>
+                    </div>
+                    <div class="footer-grid">
+                        <div class="footer-col">
+                            <span class="footer-col-label">Product</span>
+                            <a href="products.html">Products Overview</a>
+                            <a href="product-ortb.html">oRTB Infrastructure</a>
+                            <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
+                            <a href="product-prebid-server.html">Prebid Server</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-label">Navigate</span>
+                            <a href="index.html#stack">How It Works</a>
+                            <a href="index.html#values">Why Floxis</a>
+                            <a href="index.html#cta">Contact Us</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-label">Get In Touch</span>
+                            <a href="mailto:hello@floxis.io">hello@floxis.io</a>
+                            <a href="index.html#cta">Request Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-copy">&copy; 2026 Floxis. All rights reserved.</p>
+                    <div class="footer-ticker">
+                        <div class="footer-ticker-inner">
+                            <span>Server-Side Infrastructure</span>
+                            <span>Publisher-Controlled</span>
+                            <span>oRTB &amp; Prebid Server</span>
+                            <span>Zero Latency</span>
+                            <span>No Lock-In</span>
+                            <span>Server-Side Infrastructure</span>
+                            <span>Publisher-Controlled</span>
+                            <span>oRTB &amp; Prebid Server</span>
+                            <span>Zero Latency</span>
+                            <span>No Lock-In</span>
+                        </div>
+                    </div>
+                    <div class="footer-legal">
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Scroll reveal animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prebid.js Infrastructure — Floxis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --cyan: #47EBEB;
+            --cyan-light: #87FFFF;
+            --cyan-dark: #00B8B9;
+            --purple: #8952FD;
+            --purple-light: #9F75F9;
+            --purple-dark: #632CDA;
+            --gradient: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
+            --glow-cyan: rgba(71, 235, 235, 0.15);
+            --glow-purple: rgba(137, 82, 253, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --bg: #07060D;
+            --bg-elevated: #0E0D15;
+            --bg-card: #12111A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94949E;
+            --text-dim: #5C5C66;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-light: rgba(255, 255, 255, 0.12);
+            --nav-bg: rgba(7, 6, 13, 0.92);
+            --card-bg: #12111A;
+            --input-bg: #07060D;
+            --accent: #47EBEB;
+            --accent-light: #87FFFF;
+            --gradient-text: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
+        }
+
+        [data-theme="light"] {
+            --bg: #FFFFFF;
+            --bg-elevated: #F8F7F4;
+            --bg-card: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-dim: #999999;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-light: rgba(0, 0, 0, 0.12);
+            --nav-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: #FFFFFF;
+            --input-bg: #F5F5F5;
+            --glow-cyan: rgba(71, 235, 235, 0.25);
+            --glow-purple: rgba(137, 82, 253, 0.2);
+            --accent: #8952FD;
+            --accent-light: #9F75F9;
+            --gradient-text: linear-gradient(135deg, #632CDA 0%, #47EBEB 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            font-size: 16px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.5s ease;
+        }
+
+        [data-theme="light"] .bg-grid {
+            opacity: 0.3;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -20%;
+            left: 30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, var(--glow-purple) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-glow-cyan {
+            position: fixed;
+            bottom: -20%;
+            right: 20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(ellipse at center, var(--glow-cyan) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            transition: opacity 0.5s ease;
+        }
+
+        [data-theme="light"] .bg-glow,
+        [data-theme="light"] .bg-glow-cyan {
+            opacity: 0.4;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled {
+            padding: 16px 0;
+        }
+
+        .nav-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid transparent;
+            border-radius: 0;
+            padding: 12px 0;
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled .nav-wrapper {
+            max-width: 1000px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 24px;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.6s ease;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+            transition: gap 0.6s ease;
+        }
+
+        nav.scrolled .nav-links {
+            gap: 28px;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s ease;
+            letter-spacing: 0.02em;
+        }
+
+        nav.scrolled .nav-links a {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Nav Dropdown */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown > a { display: inline-flex; align-items: center; gap: 4px; }
+        .nav-dropdown > a .dropdown-arrow { width: 10px; height: 10px; transition: transform 0.3s ease; }
+        .nav-dropdown:hover > a .dropdown-arrow { transform: rotate(180deg); }
+        .nav-dropdown-menu {
+            position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+            min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border);
+            border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transform: translateX(-50%) translateY(4px); z-index: 200;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        [data-theme="light"] .nav-dropdown-menu { background: rgba(255,255,255,0.95); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .nav-dropdown-menu a { display: block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--text-secondary); text-decoration: none; border-radius: 8px; transition: all 0.2s ease; white-space: nowrap; }
+        .nav-dropdown-menu a::after { display: none; }
+        .nav-dropdown-menu a:hover { color: var(--text-primary); background: rgba(71,235,235,0.08); }
+        [data-theme="light"] .nav-dropdown-menu a:hover { background: rgba(137,82,253,0.08); }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-cta {
+            transition: all 0.6s ease;
+        }
+
+        nav.scrolled .nav-cta {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: #FFFFFF;
+            padding: 14px 28px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        [data-theme="light"] .btn-primary {
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--glow-cyan), 0 4px 16px var(--glow-purple);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: linear-gradient(135deg, #632CDA 0%, #00B8B9 100%);
+            box-shadow: 0 8px 32px var(--glow-purple), 0 4px 16px var(--glow-cyan);
+        }
+
+        .btn-ghost {
+            color: var(--text-secondary);
+            padding: 12px 0;
+            position: relative;
+        }
+
+        .btn-ghost::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .btn-ghost:hover {
+            color: var(--accent);
+        }
+
+        .btn-ghost:hover::after {
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 160px 0 120px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 780px;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 32px;
+            padding: 10px 18px;
+            background: rgba(71, 235, 235, 0.08);
+            border: 1px solid rgba(71, 235, 235, 0.2);
+            border-radius: 100px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        [data-theme="light"] .hero-label {
+            background: rgba(137, 82, 253, 0.08);
+            border-color: rgba(137, 82, 253, 0.2);
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(36px, 4.5vw, 56px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
+        }
+
+        .hero-sub {
+            font-size: 17px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards;
+        }
+
+        .hero-ctas {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Styles */
+        .page-section {
+            padding: 120px 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+            transition: border-color 0.5s ease;
+        }
+
+        .page-section.alt-bg {
+            background: var(--bg-elevated);
+            transition: background 0.5s ease;
+        }
+
+        [data-theme="light"] .page-section.alt-bg {
+            background: #F8F7F4;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            transition: color 0.5s ease;
+        }
+
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(28px, 3.5vw, 42px);
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .section-text {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin-bottom: 40px;
+        }
+
+        .section-note {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-top: 40px;
+            max-width: 680px;
+        }
+
+        /* Simple List (no cards, no icons) */
+        .simple-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .simple-list li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .simple-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.8;
+        }
+
+        /* Ownership Architecture Diagram */
+        .diagram-wrapper {
+            margin: 56px 0 48px;
+            padding: 48px 40px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow-x: auto;
+        }
+
+        [data-theme="light"] .diagram-wrapper {
+            background: var(--bg-card);
+        }
+
+        .architecture-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            min-width: 700px;
+        }
+
+        .flow-box {
+            padding: 14px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+            background: var(--bg);
+            flex-shrink: 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .flow-box .flow-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .flow-box .flow-sublabel {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 3px;
+        }
+
+        .flow-box.neutral {
+            border-color: var(--border-light);
+        }
+
+        .flow-box.neutral .flow-label {
+            color: var(--text-secondary);
+        }
+
+        .flow-box.accent {
+            border: 1.5px solid var(--accent);
+            box-shadow: 0 0 20px rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .flow-box.accent {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(137, 82, 253, 0.08);
+        }
+
+        .flow-box.accent .flow-label {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .flow-box.accent-light {
+            border: 1px solid var(--accent);
+            opacity: 0.85;
+        }
+
+        .flow-box.accent-light .flow-label {
+            color: var(--accent);
+        }
+
+        .flow-connector {
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        .flow-connector .connector-line {
+            width: 32px;
+            height: 1px;
+            background: var(--text-dim);
+            position: relative;
+        }
+
+        .flow-connector .connector-line::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            border-left: 6px solid var(--text-dim);
+        }
+
+        .diagram-caption {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-top: 28px;
+            font-style: italic;
+        }
+
+        /* Mobile diagram: stack vertically */
+        @media (max-width: 900px) {
+            .diagram-wrapper {
+                padding: 36px 24px;
+            }
+
+            .architecture-flow {
+                flex-direction: column;
+                gap: 0;
+                min-width: unset;
+            }
+
+            .flow-box {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .flow-connector {
+                padding: 6px 0;
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Explanatory list (after diagram) */
+        .explain-intro {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 40px;
+            margin-bottom: 16px;
+        }
+
+        .explain-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .explain-list li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .explain-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.8;
+        }
+
+        /* Two-Column Layout (Who This Is For) */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .two-col-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        .two-col-item h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .two-col-item > p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .two-col-item .simple-list {
+            margin-bottom: 24px;
+        }
+
+        .two-col-item .col-closing {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* Capability List (no cards, no icons, no grid) */
+        .capability-list {
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .capability-item {
+            max-width: 680px;
+        }
+
+        .capability-item h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .capability-item p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--text-secondary);
+        }
+
+        /* Bullet list with accent dots */
+        .accent-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .accent-list li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .accent-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.8;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section .section-label,
+        .cta-section .section-title,
+        .cta-section .section-text {
+            text-align: center;
+        }
+
+        .cta-section .section-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 40px;
+        }
+
+        .cta-section .section-note {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0 0 0;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at center, var(--text-dim) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        [data-theme="light"] footer::before {
+            opacity: 0.25;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-main {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 80px;
+            align-items: end;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 900px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-col-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .footer-col a {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            width: fit-content;
+        }
+
+        .footer-col a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-col a:hover::after {
+            width: 100%;
+        }
+
+        .footer-brand {
+            position: relative;
+        }
+
+        .footer-logo-large {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(64px, 12vw, 140px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 0.85;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.9;
+            user-select: none;
+        }
+
+        [data-theme="light"] .footer-logo-large {
+            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (max-width: 900px) {
+            .footer-brand {
+                order: -1;
+            }
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .footer-ticker {
+            flex: 1;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+
+        .footer-ticker-inner {
+            display: flex;
+            gap: 32px;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .footer-ticker-inner span {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .footer-ticker-inner span::after {
+            content: '\2022';
+            color: var(--accent);
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Fade-in animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s cubic-bezier(0.19, 1, 0.22, 1),
+                        transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in:nth-child(1) { transition-delay: 0s; }
+        .fade-in:nth-child(2) { transition-delay: 0.1s; }
+        .fade-in:nth-child(3) { transition-delay: 0.2s; }
+
+        /* Mobile nav */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-cyan"></div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-inner">
+                    <a href="index.html" class="logo">FLOXIS</a>
+                    <ul class="nav-links">
+                        <li class="nav-dropdown">
+                            <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
+                            <div class="nav-dropdown-menu">
+                                <a href="products.html">Products Overview</a>
+                                <a href="product-ortb.html">oRTB Infrastructure</a>
+                                <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
+                                <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
+                            </div>
+                        </li>
+                        <li><a href="index.html#stack">How It Works</a></li>
+                        <li><a href="index.html#values">Why Floxis</a></li>
+                        <li><a href="index.html#faq">FAQ</a></li>
+                        <li><a href="index.html#cta">Contact</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a href="index.html#cta" class="btn btn-primary nav-cta"><span>Get Started</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-label">Prebid.js Infrastructure</span>
+                <h1>Publisher-Owned Prebid.js Infrastructure</h1>
+                <p class="hero-sub">Floxis provides publisher-owned Prebid.js infrastructure that allows publishers and ad networks to operate and control their own Prebid.js adapters &mdash; independent of wrappers, vendors, or demand partners. This infrastructure enables teams to extend monetization logic beyond the browser while preserving full ownership of auctions, demand relationships, and decision-making.</p>
+                <div class="hero-ctas">
+                    <a href="index.html#cta" class="btn btn-primary">
+                        <span>Request a Technical Overview</span>
+                    </a>
+                    <a href="#ownership" class="btn btn-ghost">
+                        See the ownership architecture &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Floxis Provides -->
+    <section class="page-section">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Infrastructure</p>
+                <h2 class="section-title">What Floxis Provides</h2>
+                <p class="section-text">Floxis delivers the infrastructure required to operate Prebid.js adapters as a first-class, publisher-controlled component of the monetization stack.</p>
+                <ul class="simple-list">
+                    <li>Publisher-owned Prebid.js adapter infrastructure</li>
+                    <li>Server-side endpoints and routing logic</li>
+                    <li>Pricing, traffic shaping, and governance controls</li>
+                    <li>Operational support for scale and production environments</li>
+                </ul>
+                <p class="section-note">Floxis does not act as a wrapper, SSP, or demand source. It enables publishers to operate their own Prebid.js logic on their own terms.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works With Wrappers -->
+    <section class="page-section alt-bg" id="ownership">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Wrapper Integration</p>
+                <h2 class="section-title">Wrapper-Agnostic by Design</h2>
+                <p class="section-text">Floxis' Prebid.js infrastructure is designed to work across wrappers, without creating dependency on any single wrapper or vendor.</p>
+            </div>
+
+            <!-- Ownership Architecture Diagram -->
+            <div class="diagram-wrapper fade-in">
+                <div class="architecture-flow">
+                    <div class="flow-box neutral">
+                        <div class="flow-label">Browser</div>
+                        <div class="flow-sublabel">Client environment</div>
+                    </div>
+                    <div class="flow-connector"><div class="connector-line"></div></div>
+                    <div class="flow-box neutral">
+                        <div class="flow-label">Wrapper</div>
+                        <div class="flow-sublabel">Interchangeable</div>
+                    </div>
+                    <div class="flow-connector"><div class="connector-line"></div></div>
+                    <div class="flow-box accent">
+                        <div class="flow-label">Publisher-Owned<br>Prebid.js Adapter</div>
+                        <div class="flow-sublabel">Floxis</div>
+                    </div>
+                    <div class="flow-connector"><div class="connector-line"></div></div>
+                    <div class="flow-box accent-light">
+                        <div class="flow-label">Server-Side<br>Infrastructure</div>
+                        <div class="flow-sublabel">Pricing, routing, governance</div>
+                    </div>
+                    <div class="flow-connector"><div class="connector-line"></div></div>
+                    <div class="flow-box neutral">
+                        <div class="flow-label">Ad Server</div>
+                        <div class="flow-sublabel">Final decisioning</div>
+                    </div>
+                </div>
+                <p class="diagram-caption">The wrapper runs the client-side auction. The publisher owns the Prebid.js adapter and logic.</p>
+            </div>
+
+            <div class="fade-in">
+                <p class="explain-intro">In this model:</p>
+                <ul class="explain-list">
+                    <li>The wrapper executes the client-side auction</li>
+                    <li>The publisher-owned Prebid.js adapter (enabled by Floxis) routes requests</li>
+                    <li>Server-side logic handles pricing, routing, and governance</li>
+                    <li>The ad server retains full control over auction outcomes</li>
+                </ul>
+                <p class="section-note">This approach allows publishers to maintain flexibility across wrappers while centralizing control over monetization behavior.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who This Is For -->
+    <section class="page-section">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Audience</p>
+                <h2 class="section-title">Who This Is For</h2>
+            </div>
+            <div class="two-col-grid fade-in">
+                <div class="two-col-item">
+                    <h3>Publishers</h3>
+                    <p>For publishers who want to:</p>
+                    <ul class="simple-list">
+                        <li>Own and operate their Prebid.js adapters</li>
+                        <li>Reduce reliance on vendor-controlled integrations</li>
+                        <li>Apply consistent pricing and routing logic across wrappers</li>
+                        <li>Extend monetization control beyond the browser</li>
+                    </ul>
+                    <p class="col-closing">Floxis enables Prebid.js to function as publisher infrastructure, not a vendor dependency.</p>
+                </div>
+                <div class="two-col-item">
+                    <h3>Ad Networks &amp; Enterprises</h3>
+                    <p>For networks and large platforms that need to:</p>
+                    <ul class="simple-list">
+                        <li>Standardize Prebid.js adapter infrastructure across properties</li>
+                        <li>Operate at scale with centralized governance</li>
+                        <li>Support multiple wrappers and partner environments</li>
+                        <li>Maintain control over monetization logic and demand flow</li>
+                    </ul>
+                    <p class="col-closing">Floxis provides the foundation to run Prebid.js infrastructure reliably in enterprise environments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What This Enables -->
+    <section class="page-section alt-bg">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Capabilities</p>
+                <h2 class="section-title">What This Enables</h2>
+                <p class="section-text">By operating publisher-owned Prebid.js infrastructure, Floxis enables:</p>
+            </div>
+            <div class="capability-list fade-in">
+                <div class="capability-item">
+                    <h4>Pricing &amp; Floor Price Control</h4>
+                    <p>Apply consistent pricing logic across demand without relying on wrapper-specific behavior.</p>
+                </div>
+                <div class="capability-item">
+                    <h4>Traffic Shaping &amp; Routing</h4>
+                    <p>Route and segment traffic based on business rules you control.</p>
+                </div>
+                <div class="capability-item">
+                    <h4>Supply Path Control (SPO)</h4>
+                    <p>Enforce preferred demand paths while respecting auction execution.</p>
+                </div>
+                <div class="capability-item">
+                    <h4>Request Volume Management</h4>
+                    <p>Control request behavior to improve efficiency and reduce waste.</p>
+                </div>
+                <div class="capability-item">
+                    <h4>Controlled Experimentation</h4>
+                    <p>Safely test monetization strategies without exposing production traffic to risk.</p>
+                </div>
+            </div>
+            <div class="fade-in">
+                <p class="section-note">All capabilities operate server-side and integrate cleanly into existing stacks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety & Compatibility -->
+    <section class="page-section">
+        <div class="container">
+            <div class="fade-in">
+                <h2 class="section-title">Safety, Quality &amp; Compatibility</h2>
+                <p class="section-text">Floxis' Prebid.js infrastructure is built for production environments where quality and compliance are non-negotiable.</p>
+                <ul class="accent-list">
+                    <li>Compatible with IVT and brand safety tools (Confiant, GeoEdge, DoubleVerify)</li>
+                    <li>Does not bypass wrapper enforcement, fraud detection, or quality controls</li>
+                    <li>Preserves auction integrity and demand ownership</li>
+                    <li>Introduces no client-side execution or browser latency</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation & Ownership -->
+    <section class="page-section alt-bg">
+        <div class="container">
+            <div class="fade-in">
+                <h2 class="section-title">Implementation &amp; Ownership</h2>
+                <ul class="accent-list" style="margin-top: 28px;">
+                    <li>Publishers and networks own their Prebid.js adapters</li>
+                    <li>Floxis provides infrastructure, tooling, and operational support</li>
+                    <li>No forced demand, no black-box execution</li>
+                    <li>Designed for incremental rollout and validation</li>
+                </ul>
+                <p class="section-note">This model ensures transparency, control, and long-term independence.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="fade-in">
+                <p class="section-label">Next Steps</p>
+                <h2 class="section-title">Request a Technical Overview</h2>
+                <p class="section-text">If you're evaluating how to operate Prebid.js infrastructure with greater control and flexibility, we're happy to walk through architecture, deployment models, and fit.</p>
+                <a href="index.html#cta" class="btn btn-primary">
+                    <span>Request a Technical Overview</span>
+                </a>
+                <p class="section-note">Architecture, integrations, and fit discussion &mdash; no sales pitch.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand"><span class="footer-logo-large">FLOXIS</span></div>
+                    <div class="footer-grid">
+                        <div class="footer-col">
+                            <span class="footer-col-label">Product</span>
+                            <a href="products.html">Products Overview</a>
+                            <a href="product-ortb.html">oRTB Infrastructure</a>
+                            <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
+                            <a href="product-prebid-server.html">Prebid Server</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-label">Navigate</span>
+                            <a href="index.html#stack">How It Works</a>
+                            <a href="index.html#values">Why Floxis</a>
+                            <a href="index.html#cta">Contact Us</a>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-label">Get In Touch</span>
+                            <a href="mailto:hello@floxis.io">hello@floxis.io</a>
+                            <a href="index.html#cta">Request Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-copy">&copy; 2026 Floxis. All rights reserved.</p>
+                    <div class="footer-ticker">
+                        <div class="footer-ticker-inner">
+                            <span>Server-Side Infrastructure</span><span>Publisher-Controlled</span>
+                            <span>oRTB &amp; Prebid Server</span><span>Zero Latency</span><span>No Lock-In</span>
+                            <span>Server-Side Infrastructure</span><span>Publisher-Controlled</span>
+                            <span>oRTB &amp; Prebid Server</span><span>Zero Latency</span><span>No Lock-In</span>
+                        </div>
+                    </div>
+                    <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // IntersectionObserver for fade-in animations
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
