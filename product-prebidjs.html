@@ -819,8 +819,13 @@
         }
 
         .two-col-item .simple-list {
-            grid-template-columns: 1fr;
+            flex-direction: column;
+            justify-content: flex-start;
             margin-bottom: 24px;
+        }
+
+        .two-col-item .simple-list li {
+            flex: 1 1 100%;
         }
 
         .two-col-item .col-closing {
