@@ -259,26 +259,6 @@
             transform-origin: left;
         }
 
-        /* Nav Dropdown */
-        .nav-dropdown { position: relative; }
-        .nav-dropdown > a { display: inline-flex; align-items: center; gap: 4px; }
-        .nav-dropdown > a .dropdown-arrow { width: 10px; height: 10px; transition: transform 0.3s ease; }
-        .nav-dropdown:hover > a .dropdown-arrow { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-            min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border);
-            border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-            transform: translateX(-50%) translateY(4px); z-index: 200;
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-        }
-        [data-theme="light"] .nav-dropdown-menu { background: rgba(255,255,255,0.95); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        .nav-dropdown-menu a { display: block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--text-secondary); text-decoration: none; border-radius: 8px; transition: all 0.2s ease; white-space: nowrap; }
-        .nav-dropdown-menu a::after { display: none; }
-        .nav-dropdown-menu a:hover { color: var(--text-primary); background: rgba(71,235,235,0.08); }
-        [data-theme="light"] .nav-dropdown-menu a:hover { background: rgba(137,82,253,0.08); }
-
         .nav-actions {
             display: flex;
             align-items: center;
@@ -293,6 +273,82 @@
             padding: 10px 18px;
             border-radius: 8px;
             font-size: 13px;
+        }
+
+        /* Nav Dropdown */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-dropdown > a .dropdown-arrow {
+            width: 10px;
+            height: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover > a .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 240px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transform: translateX(-50%) translateY(4px);
+            z-index: 200;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a::after {
+            display: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            color: var(--text-primary);
+            background: rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu a:hover {
+            background: rgba(137, 82, 253, 0.08);
         }
 
         /* Buttons */
@@ -469,6 +525,15 @@
             background: #F8F7F4;
         }
 
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header .section-text {
+            text-align: center;
+        }
+
         .section-label {
             font-size: 12px;
             font-weight: 600;
@@ -494,7 +559,7 @@
             line-height: 1.75;
             color: var(--text-secondary);
             max-width: 680px;
-            margin-bottom: 40px;
+            margin: 0 auto 40px;
         }
 
         .section-note {
@@ -504,30 +569,47 @@
             font-style: italic;
             margin-top: 40px;
             max-width: 680px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Simple List (no cards, no icons) */
+        /* Simple List (grid cards) */
         .simple-list {
             list-style: none;
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 16px;
+            justify-content: center;
+            max-width: 100%;
             margin-bottom: 8px;
         }
 
         .simple-list li {
+            flex: 0 1 calc(50% - 8px);
+            min-width: 260px;
             font-size: 16px;
             line-height: 1.7;
             color: var(--text-primary);
-            padding-left: 24px;
+            padding: 16px 20px 16px 44px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
             position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .simple-list li {
+                flex: 1 1 100%;
+            }
         }
 
         .simple-list li::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 10px;
+            left: 20px;
+            top: 22px;
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -737,6 +819,7 @@
         }
 
         .two-col-item .simple-list {
+            grid-template-columns: 1fr;
             margin-bottom: 24px;
         }
 
@@ -747,15 +830,65 @@
             font-style: italic;
         }
 
-        /* Capability List (no cards, no icons, no grid) */
+        /* Capability List (grid cards) */
         .capability-list {
             display: flex;
-            flex-direction: column;
-            gap: 36px;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
         }
 
         .capability-item {
-            max-width: 680px;
+            flex: 0 1 calc(50% - 12px);
+            min-width: 280px;
+            padding: 32px 24px;
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            max-width: none;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .capability-item {
+                flex: 1 1 100%;
+            }
+        }
+
+        [data-theme="light"] .capability-item {
+            background: var(--bg-card);
+            border-color: var(--border);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .capability-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .capability-item:hover {
+            transform: translateY(-4px);
+            border-color: rgba(71, 235, 235, 0.3);
+            box-shadow: 0 12px 40px rgba(71, 235, 235, 0.12);
+        }
+
+        [data-theme="light"] .capability-item:hover {
+            border-color: rgba(137, 82, 253, 0.3);
+            box-shadow: 0 12px 40px rgba(137, 82, 253, 0.1);
+        }
+
+        .capability-item:hover::before {
+            opacity: 1;
         }
 
         .capability-item h4 {
@@ -773,27 +906,40 @@
             color: var(--text-secondary);
         }
 
-        /* Bullet list with accent dots */
+        /* Bullet list with accent dots (grid cards) */
         .accent-list {
             list-style: none;
             display: flex;
-            flex-direction: column;
-            gap: 14px;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
 
         .accent-list li {
+            flex: 0 1 calc(50% - 8px);
+            min-width: 260px;
             font-size: 16px;
             line-height: 1.7;
             color: var(--text-secondary);
-            padding-left: 24px;
+            padding: 16px 20px 16px 44px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
             position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .accent-list li {
+                flex: 1 1 100%;
+            }
         }
 
         .accent-list li::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 10px;
+            left: 20px;
+            top: 22px;
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -1077,7 +1223,6 @@
                         <li class="nav-dropdown">
                             <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
                             <div class="nav-dropdown-menu">
-                                <a href="products.html">Products Overview</a>
                                 <a href="product-ortb.html">oRTB Infrastructure</a>
                                 <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                                 <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
@@ -1102,7 +1247,7 @@
             <div class="hero-content">
                 <span class="hero-label">Prebid.js Infrastructure</span>
                 <h1>Publisher-Owned Prebid.js Infrastructure</h1>
-                <p class="hero-sub">Floxis provides publisher-owned Prebid.js infrastructure that allows publishers and ad networks to operate and control their own Prebid.js adapters &mdash; independent of wrappers, vendors, or demand partners. This infrastructure enables teams to extend monetization logic beyond the browser while preserving full ownership of auctions, demand relationships, and decision-making.</p>
+                <p class="hero-sub">Floxis provides publisher-owned Prebid.js infrastructure that allows publishers and ad networks to operate and control their own Prebid.js adapters &mdash; independent of wrappers, vendors, or demand partners.</p>
                 <div class="hero-ctas">
                     <a href="index.html#cta" class="btn btn-primary">
                         <span>Request a Technical Overview</span>
@@ -1118,25 +1263,24 @@
     <!-- What Floxis Provides -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Infrastructure</p>
                 <h2 class="section-title">What Floxis Provides</h2>
                 <p class="section-text">Floxis delivers the infrastructure required to operate Prebid.js adapters as a first-class, publisher-controlled component of the monetization stack.</p>
-                <ul class="simple-list">
-                    <li>Publisher-owned Prebid.js adapter infrastructure</li>
-                    <li>Server-side endpoints and routing logic</li>
-                    <li>Pricing, traffic shaping, and governance controls</li>
-                    <li>Operational support for scale and production environments</li>
-                </ul>
-                <p class="section-note">Floxis does not act as a wrapper, SSP, or demand source. It enables publishers to operate their own Prebid.js logic on their own terms.</p>
             </div>
+            <ul class="simple-list fade-in">
+                <li>Publisher-owned Prebid.js adapter infrastructure</li>
+                <li>Server-side endpoints and routing logic</li>
+                <li>Pricing, traffic shaping, and governance controls</li>
+                <li>Operational support for scale and production environments</li>
+            </ul>
         </div>
     </section>
 
     <!-- How It Works With Wrappers -->
     <section class="page-section alt-bg" id="ownership">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Wrapper Integration</p>
                 <h2 class="section-title">Wrapper-Agnostic by Design</h2>
                 <p class="section-text">Floxis' Prebid.js infrastructure is designed to work across wrappers, without creating dependency on any single wrapper or vendor.</p>
@@ -1181,7 +1325,6 @@
                     <li>Server-side logic handles pricing, routing, and governance</li>
                     <li>The ad server retains full control over auction outcomes</li>
                 </ul>
-                <p class="section-note">This approach allows publishers to maintain flexibility across wrappers while centralizing control over monetization behavior.</p>
             </div>
         </div>
     </section>
@@ -1189,7 +1332,7 @@
     <!-- Who This Is For -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Audience</p>
                 <h2 class="section-title">Who This Is For</h2>
             </div>
@@ -1203,7 +1346,6 @@
                         <li>Apply consistent pricing and routing logic across wrappers</li>
                         <li>Extend monetization control beyond the browser</li>
                     </ul>
-                    <p class="col-closing">Floxis enables Prebid.js to function as publisher infrastructure, not a vendor dependency.</p>
                 </div>
                 <div class="two-col-item">
                     <h3>Ad Networks &amp; Enterprises</h3>
@@ -1214,7 +1356,6 @@
                         <li>Support multiple wrappers and partner environments</li>
                         <li>Maintain control over monetization logic and demand flow</li>
                     </ul>
-                    <p class="col-closing">Floxis provides the foundation to run Prebid.js infrastructure reliably in enterprise environments.</p>
                 </div>
             </div>
         </div>
@@ -1223,7 +1364,7 @@
     <!-- What This Enables -->
     <section class="page-section alt-bg">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Capabilities</p>
                 <h2 class="section-title">What This Enables</h2>
                 <p class="section-text">By operating publisher-owned Prebid.js infrastructure, Floxis enables:</p>
@@ -1250,48 +1391,28 @@
                     <p>Safely test monetization strategies without exposing production traffic to risk.</p>
                 </div>
             </div>
-            <div class="fade-in">
-                <p class="section-note">All capabilities operate server-side and integrate cleanly into existing stacks.</p>
-            </div>
         </div>
     </section>
 
     <!-- Safety & Compatibility -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <h2 class="section-title">Safety, Quality &amp; Compatibility</h2>
-                <p class="section-text">Floxis' Prebid.js infrastructure is built for production environments where quality and compliance are non-negotiable.</p>
-                <ul class="accent-list">
-                    <li>Compatible with IVT and brand safety tools (Confiant, GeoEdge, DoubleVerify)</li>
-                    <li>Does not bypass wrapper enforcement, fraud detection, or quality controls</li>
-                    <li>Preserves auction integrity and demand ownership</li>
-                    <li>Introduces no client-side execution or browser latency</li>
-                </ul>
             </div>
-        </div>
-    </section>
-
-    <!-- Implementation & Ownership -->
-    <section class="page-section alt-bg">
-        <div class="container">
-            <div class="fade-in">
-                <h2 class="section-title">Implementation &amp; Ownership</h2>
-                <ul class="accent-list" style="margin-top: 28px;">
-                    <li>Publishers and networks own their Prebid.js adapters</li>
-                    <li>Floxis provides infrastructure, tooling, and operational support</li>
-                    <li>No forced demand, no black-box execution</li>
-                    <li>Designed for incremental rollout and validation</li>
-                </ul>
-                <p class="section-note">This model ensures transparency, control, and long-term independence.</p>
-            </div>
+            <ul class="accent-list fade-in">
+                <li>Compatible with IVT and brand safety tools (Confiant, GeoEdge, DoubleVerify)</li>
+                <li>Does not bypass wrapper enforcement, fraud detection, or quality controls</li>
+                <li>Preserves auction integrity and demand ownership</li>
+                <li>Introduces no client-side execution or browser latency</li>
+            </ul>
         </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Next Steps</p>
                 <h2 class="section-title">Request a Technical Overview</h2>
                 <p class="section-text">If you're evaluating how to operate Prebid.js infrastructure with greater control and flexibility, we're happy to walk through architecture, deployment models, and fit.</p>

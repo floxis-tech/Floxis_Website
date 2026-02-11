@@ -274,24 +274,80 @@
         }
 
         /* Nav Dropdown */
-        .nav-dropdown { position: relative; }
-        .nav-dropdown > a { display: inline-flex; align-items: center; gap: 4px; }
-        .nav-dropdown > a .dropdown-arrow { width: 10px; height: 10px; transition: transform 0.3s ease; }
-        .nav-dropdown:hover > a .dropdown-arrow { transform: rotate(180deg); }
-        .nav-dropdown-menu {
-            position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-            min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border);
-            border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-            transform: translateX(-50%) translateY(4px); z-index: 200;
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        .nav-dropdown {
+            position: relative;
         }
-        [data-theme="light"] .nav-dropdown-menu { background: rgba(255,255,255,0.95); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-        .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-        .nav-dropdown-menu a { display: block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--text-secondary); text-decoration: none; border-radius: 8px; transition: all 0.2s ease; white-space: nowrap; }
-        .nav-dropdown-menu a::after { display: none; }
-        .nav-dropdown-menu a:hover { color: var(--text-primary); background: rgba(71,235,235,0.08); }
-        [data-theme="light"] .nav-dropdown-menu a:hover { background: rgba(137,82,253,0.08); }
+
+        .nav-dropdown > a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-dropdown > a .dropdown-arrow {
+            width: 10px;
+            height: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover > a .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 240px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transform: translateX(-50%) translateY(4px);
+            z-index: 200;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a::after {
+            display: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            color: var(--text-primary);
+            background: rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu a:hover {
+            background: rgba(137, 82, 253, 0.08);
+        }
 
         /* Buttons */
         .btn {
@@ -487,6 +543,20 @@
             transition: border-color 0.5s ease;
         }
 
+        .page-section.alt-bg {
+            background: var(--bg-elevated);
+            transition: background 0.5s ease;
+        }
+
+        [data-theme="light"] .page-section.alt-bg {
+            background: #F8F7F4;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
         .section-label {
             font-size: 12px;
             font-weight: 600;
@@ -512,7 +582,11 @@
             line-height: 1.75;
             color: var(--text-secondary);
             max-width: 680px;
-            margin-bottom: 40px;
+            margin: 0 auto 40px;
+        }
+
+        .section-header .section-text {
+            text-align: center;
         }
 
         .section-small {
@@ -520,35 +594,132 @@
             line-height: 1.7;
             color: var(--text-dim);
             font-style: italic;
-            margin-top: 40px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
+            margin-top: 48px;
+            text-align: center;
             max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Bullet list */
+        /* Feature Cards Grid */
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .feature-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .feature-card {
+            padding: 36px 28px;
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        [data-theme="light"] .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            bottom: 24px;
+            left: 0;
+            width: 3px;
+            background: var(--gradient);
+            border-radius: 0 3px 3px 0;
+            opacity: 0.6;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(137, 82, 253, 0.3);
+            box-shadow: 0 12px 40px rgba(137, 82, 253, 0.15);
+        }
+
+        [data-theme="light"] .feature-card:hover {
+            box-shadow: 0 12px 40px rgba(137, 82, 253, 0.12);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+            top: 16px;
+            bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Bullet list in cards */
         .bullet-list {
             list-style: none;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-width: 680px;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
 
         .bullet-list li {
-            font-size: 16px;
+            flex: 0 1 calc(50% - 8px);
+            min-width: 260px;
+            font-size: 15px;
             line-height: 1.65;
             color: var(--text-secondary);
-            padding-left: 24px;
+            padding: 16px 20px 16px 44px;
             position: relative;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .bullet-list li {
+                flex: 1 1 100%;
+            }
+        }
+
+        [data-theme="light"] .bullet-list li {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .bullet-list li:hover {
+            border-color: var(--border-light);
         }
 
         .bullet-list li::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 10px;
+            left: 20px;
+            top: 22px;
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -617,15 +788,35 @@
         .responsibilities-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 48px;
+            gap: 28px;
             margin-top: 8px;
         }
 
         @media (max-width: 768px) {
             .responsibilities-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 20px;
             }
+        }
+
+        .responsibility-col {
+            padding: 36px 32px;
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+        }
+
+        [data-theme="light"] .responsibility-col {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .responsibility-col:hover {
+            border-color: rgba(137, 82, 253, 0.2);
         }
 
         .responsibility-col h3 {
@@ -704,10 +895,53 @@
 
         /* Integration Sub-sections */
         .integration-blocks {
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            max-width: 680px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .integration-blocks {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .integration-block {
+            padding: 36px 28px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-block::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .integration-block:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-light);
+            box-shadow: 0 8px 32px rgba(71, 235, 235, 0.1);
+        }
+
+        .integration-block:hover::after {
+            opacity: 1;
+        }
+
+        [data-theme="light"] .integration-block {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         }
 
         .integration-block h3 {
@@ -720,31 +954,82 @@
         }
 
         .integration-block p {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.75;
             color: var(--text-secondary);
         }
 
-        /* Capability List */
-        .capability-list {
+        /* Capability Cards */
+        .capability-grid {
             display: flex;
-            flex-direction: column;
-            gap: 32px;
-            max-width: 680px;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
         }
 
-        .capability-item h3 {
+        .capability-card {
+            flex: 0 1 calc(50% - 12px);
+            min-width: 280px;
+        }
+
+        @media (max-width: 768px) {
+            .capability-card {
+                flex: 1 1 100%;
+            }
+        }
+
+        .capability-card {
+            padding: 32px 24px;
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="light"] .capability-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(71, 235, 235, 0.3);
+            box-shadow: 0 12px 40px rgba(71, 235, 235, 0.12);
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-card h3 {
             font-family: 'Inter', sans-serif;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             letter-spacing: -0.01em;
         }
 
-        .capability-item p {
-            font-size: 15px;
-            line-height: 1.75;
+        .capability-card p {
+            font-size: 14px;
+            line-height: 1.7;
             color: var(--text-secondary);
         }
 
@@ -1032,7 +1317,6 @@
                         <li class="nav-dropdown">
                             <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
                             <div class="nav-dropdown-menu">
-                                <a href="products.html">Products Overview</a>
                                 <a href="product-ortb.html">oRTB Infrastructure</a>
                                 <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                                 <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
@@ -1083,17 +1367,16 @@
     <!-- Stack Placement -->
     <section class="page-section" id="stack-placement">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Stack Integration</p>
                 <h2 class="section-title">Built to Operate Inside Your Stack</h2>
                 <p class="section-text">Floxis operates server-side, between your demand integrations and your ad server, acting as a controlled infrastructure layer — not an ad server, wrapper, or demand source.</p>
-                <ul class="bullet-list">
-                    <li>Integrates with existing SSPs, DSPs, and direct demand</li>
-                    <li>Respects ad server priorities and auction logic</li>
-                    <li>Preserves full ownership of demand relationships and pricing decisions</li>
-                </ul>
-                <p class="section-small">Floxis is designed to work with your current setup, not around it.</p>
             </div>
+            <ul class="bullet-list fade-in">
+                <li>Integrates with existing SSPs, DSPs, and direct demand</li>
+                <li>Respects ad server priorities and auction logic</li>
+                <li>Preserves full ownership of demand relationships and pricing decisions</li>
+            </ul>
 
             <!-- Stack Placement Diagram -->
             <div class="diagram-wrapper fade-in">
@@ -1116,13 +1399,14 @@
                 </div>
             </div>
             <p class="diagram-caption fade-in">Floxis operates server-side within your existing monetization stack.</p>
+
         </div>
     </section>
 
     <!-- Defined Responsibilities -->
-    <section class="page-section">
+    <section class="page-section alt-bg">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Responsibilities</p>
                 <h2 class="section-title">Defined Responsibilities. Clear Boundaries.</h2>
                 <p class="section-text">Floxis' oRTB infrastructure is purpose-built to handle server-side monetization logic while leaving ad serving, auctions, and demand ownership exactly where they belong.</p>
@@ -1148,7 +1432,7 @@
                     </ul>
                 </div>
             </div>
-            <p class="section-small fade-in">This clear separation ensures Floxis adds control and efficiency without introducing operational or commercial risk.</p>
+
         </div>
     </section>
 
@@ -1168,7 +1452,7 @@
     <!-- Flexible Integration -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Integration</p>
                 <h2 class="section-title">Flexible Integration, One Infrastructure</h2>
                 <p class="section-text">Floxis' oRTB infrastructure can be activated in multiple ways, depending on how your stack is configured — without changing the underlying system or ownership model.</p>
@@ -1191,72 +1475,72 @@
     </section>
 
     <!-- Infrastructure Capabilities -->
-    <section class="page-section">
+    <section class="page-section alt-bg">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Capabilities</p>
                 <h2 class="section-title">Native Controls Within the oRTB Layer</h2>
                 <p class="section-text">Within the oRTB infrastructure, Floxis provides server-side capabilities that allow publishers and ad networks to manage demand behavior, pricing, and efficiency without modifying their existing stack.</p>
             </div>
-            <div class="capability-list fade-in">
-                <div class="capability-item">
+            <div class="capability-grid fade-in">
+                <div class="capability-card">
                     <h3>Supply Path Control (SPO)</h3>
                     <p>Define and enforce preferred demand paths server-side while respecting auction priorities and partner relationships.</p>
                 </div>
-                <div class="capability-item">
+                <div class="capability-card">
                     <h3>Pricing &amp; Floor Price Control</h3>
                     <p>Set and manage pricing rules across demand in a transparent and controlled manner, without disrupting auction execution.</p>
                 </div>
-                <div class="capability-item">
+                <div class="capability-card">
                     <h3>Traffic Shaping &amp; Routing</h3>
                     <p>Shape, segment, and route traffic based on business rules, performance signals, and operational requirements you control.</p>
                 </div>
-                <div class="capability-item">
+                <div class="capability-card">
                     <h3>Request Volume Management</h3>
                     <p>Manage query volume and request behavior to improve efficiency, reduce waste, and maintain predictable performance.</p>
                 </div>
-                <div class="capability-item">
+                <div class="capability-card">
                     <h3>Controlled Experimentation</h3>
                     <p>Test pricing, routing, and demand strategies safely within your existing stack, without exposing production traffic to unnecessary risk.</p>
                 </div>
             </div>
-            <p class="section-small fade-in">All capabilities operate server-side and are compatible with existing IVT and brand safety tools, including Confiant, GeoEdge, and DoubleVerify.</p>
+
         </div>
     </section>
 
     <!-- Safety & Compatibility -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Safety</p>
                 <h2 class="section-title">Designed for Production Environments</h2>
-                <p class="section-text">Floxis is built to operate within real-world publisher and network environments, where traffic quality, brand safety, and operational integrity are non-negotiable.</p>
-                <ul class="bullet-list">
-                    <li>Compatible with IVT and brand safety solutions (Confiant, GeoEdge, DoubleVerify)</li>
-                    <li>Does not bypass existing fraud detection or enforcement</li>
-                    <li>Operates entirely server-side with no client-side impact</li>
-                    <li>Preserves publisher controls, reporting, and transparency</li>
-                </ul>
-                <p class="section-small">Floxis is designed to integrate cleanly into existing quality and compliance workflows, not create new ones.</p>
+
             </div>
+            <ul class="bullet-list fade-in">
+                <li>Compatible with IVT and brand safety solutions (Confiant, GeoEdge, DoubleVerify)</li>
+                <li>Does not bypass existing fraud detection or enforcement</li>
+                <li>Operates entirely server-side with no client-side impact</li>
+                <li>Preserves publisher controls, reporting, and transparency</li>
+            </ul>
+
         </div>
     </section>
 
     <!-- Implementation -->
-    <section class="page-section">
+    <section class="page-section alt-bg">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Implementation</p>
                 <h2 class="section-title">Built for Fast, Predictable Deployment</h2>
                 <p class="section-text">Floxis is designed to integrate into existing monetization stacks with minimal engineering overhead and without operational disruption.</p>
-                <ul class="bullet-list">
-                    <li>Server-side integration aligned with existing oRTB workflows</li>
-                    <li>Compatible with current ad servers, wrappers, and demand partners</li>
-                    <li>No changes required to client-side execution or creative delivery</li>
-                    <li>Typical integrations can be completed incrementally, without downtime</li>
-                </ul>
-                <p class="section-small">Floxis supports phased rollouts, allowing teams to validate behavior and impact before expanding usage across traffic or demand.</p>
             </div>
+            <ul class="bullet-list fade-in">
+                <li>Server-side integration aligned with existing oRTB workflows</li>
+                <li>Compatible with current ad servers, wrappers, and demand partners</li>
+                <li>No changes required to client-side execution or creative delivery</li>
+                <li>Typical integrations can be completed incrementally, without downtime</li>
+            </ul>
+
         </div>
     </section>
 

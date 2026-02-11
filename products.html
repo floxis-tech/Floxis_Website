@@ -672,39 +672,66 @@
             transition: border-color 0.5s ease;
         }
 
+        .layer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .layer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
         .layer-item {
-            padding: 56px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .layer-item:first-child {
-            padding-top: 0;
-        }
-
-        .layer-item:last-child {
+            padding: 0;
             border-bottom: none;
-            padding-bottom: 0;
         }
 
         .layer-item-inner {
-            max-width: 680px;
+            padding: 32px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        [data-theme="light"] .layer-item-inner {
+            background: #FFFFFF;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .layer-item-inner:hover {
+            border-color: rgba(71, 235, 235, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .layer-item-inner:hover {
+            border-color: rgba(137, 82, 253, 0.2);
+            box-shadow: 0 8px 32px rgba(137, 82, 253, 0.08);
         }
 
         .layer-item h3 {
             font-family: 'Inter', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             letter-spacing: -0.01em;
         }
 
         .layer-item p {
-            font-size: 16px;
-            line-height: 1.75;
+            font-size: 15px;
+            line-height: 1.7;
             color: var(--text-secondary);
             margin-bottom: 24px;
-            max-width: 60ch;
+            flex: 1;
         }
 
         .layer-item .btn-ghost {
@@ -1126,7 +1153,6 @@
                         <li class="nav-dropdown">
                             <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
                             <div class="nav-dropdown-menu">
-                                <a href="products.html">Products Overview</a>
                                 <a href="product-ortb.html">oRTB Infrastructure</a>
                                 <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                                 <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
@@ -1158,30 +1184,6 @@
         </div>
     </section>
 
-    <!-- Layer Diagram -->
-    <section class="diagram-section">
-        <div class="container">
-            <div class="layer-diagram fade-in">
-                <div class="layer-diagram-box">
-                    <h5>Prebid.js Infrastructure</h5>
-                </div>
-                <div class="layer-diagram-connector">
-                    <div class="layer-diagram-connector-line"></div>
-                </div>
-                <div class="layer-diagram-box">
-                    <h5>Prebid Server Infrastructure</h5>
-                </div>
-                <div class="layer-diagram-connector">
-                    <div class="layer-diagram-connector-line"></div>
-                </div>
-                <div class="layer-diagram-box">
-                    <h5>Server-side oRTB Infrastructure</h5>
-                </div>
-            </div>
-            <p class="layer-diagram-caption fade-in">Three infrastructure layers, designed to operate independently or together.</p>
-        </div>
-    </section>
-
     <!-- Layer Sections -->
     <section class="layers-section">
         <div class="container">
@@ -1190,42 +1192,44 @@
                 <h2 class="section-title">Three Layers of Server-Side Infrastructure</h2>
             </div>
 
-            <div class="layer-item fade-in">
-                <div class="layer-item-inner">
-                    <h3>Server-side oRTB Infrastructure</h3>
-                    <p>A foundational server-side layer for managing pricing, routing, and traffic behavior across demand. Floxis' oRTB infrastructure enables publishers and ad networks to control how demand is handled and monetized, while preserving existing ad servers, auction logic, and demand relationships.</p>
-                    <a href="product-ortb.html" class="btn btn-ghost">
-                        Learn more
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M2 7h10M8 3l4 4-4 4"/>
-                        </svg>
-                    </a>
+            <div class="layer-grid fade-in">
+                <div class="layer-item">
+                    <div class="layer-item-inner">
+                        <h3>Server-side oRTB Infrastructure</h3>
+                        <p>A foundational server-side layer for managing pricing, routing, and traffic behavior across demand — while preserving existing ad servers, auction logic, and demand relationships.</p>
+                        <a href="product-ortb.html" class="btn btn-ghost">
+                            Learn more
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                                <path d="M2 7h10M8 3l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            <div class="layer-item fade-in">
-                <div class="layer-item-inner">
-                    <h3>Publisher-owned Prebid.js Adapter Infrastructure</h3>
-                    <p>A publisher-operated Prebid.js adapter that works across wrappers and remains fully owned and controlled by the publisher. This infrastructure allows publishers to extend monetization logic beyond the browser, reduce vendor dependency, and operate Prebid.js adapters on their own terms — independent of any single wrapper or demand partner.</p>
-                    <a href="product-prebidjs.html" class="btn btn-ghost">
-                        Learn more
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M2 7h10M8 3l4 4-4 4"/>
-                        </svg>
-                    </a>
+                <div class="layer-item">
+                    <div class="layer-item-inner">
+                        <h3>Publisher-owned Prebid.js Adapter Infrastructure</h3>
+                        <p>A publisher-operated Prebid.js adapter that works across wrappers and remains fully owned and controlled by the publisher — independent of any single wrapper or demand partner.</p>
+                        <a href="product-prebidjs.html" class="btn btn-ghost">
+                            Learn more
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                                <path d="M2 7h10M8 3l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            <div class="layer-item fade-in">
-                <div class="layer-item-inner">
-                    <h3>Server-side Prebid Server Infrastructure</h3>
-                    <p>A fully server-side Prebid Server environment designed for scale, efficiency, and enterprise-grade execution. Floxis enables publishers and networks to operate Prebid Server infrastructure that supports high-volume traffic, centralized governance, and low-latency performance in production environments.</p>
-                    <a href="product-prebid-server.html" class="btn btn-ghost">
-                        Learn more
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                            <path d="M2 7h10M8 3l4 4-4 4"/>
-                        </svg>
-                    </a>
+                <div class="layer-item">
+                    <div class="layer-item-inner">
+                        <h3>Server-side Prebid Server Infrastructure</h3>
+                        <p>A fully server-side Prebid Server environment designed for scale, efficiency, and enterprise-grade execution in production environments.</p>
+                        <a href="product-prebid-server.html" class="btn btn-ghost">
+                            Learn more
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                                <path d="M2 7h10M8 3l4 4-4 4"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1247,7 +1251,6 @@
                         <li>Publisher- and network-controlled</li>
                         <li>Built to integrate with existing ad servers, wrappers, and demand partners</li>
                     </ul>
-                    <p class="interop-closing">Floxis does not replace core systems — it adds control where it matters.</p>
                 </div>
             </div>
         </div>

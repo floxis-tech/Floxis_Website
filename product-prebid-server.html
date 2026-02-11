@@ -275,6 +275,18 @@
             transform-origin: left;
         }
 
+        /* ===================== */
+        /* Section Header        */
+        /* ===================== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header .section-text {
+            text-align: center;
+        }
+
         /* Nav Dropdown */
         .nav-dropdown {
             position: relative;
@@ -459,7 +471,7 @@
             line-height: 1.7;
             color: var(--text-secondary);
             max-width: 56ch;
-            margin-top: 16px;
+            margin: 16px auto 0;
         }
 
         .small-line {
@@ -468,6 +480,9 @@
             font-style: italic;
             margin-top: 28px;
             max-width: 56ch;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ===================== */
@@ -634,17 +649,28 @@
             list-style: none;
             margin-top: 24px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
 
         .infra-list li {
+            flex: 0 1 calc(50% - 8px);
+            min-width: 260px;
             font-size: 15px;
             color: var(--text-secondary);
             line-height: 1.6;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            position: relative;
+            padding: 16px 20px 16px 44px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .infra-list li {
+                flex: 1 1 100%;
+            }
         }
 
         .infra-list li::before {
@@ -654,7 +680,9 @@
             min-width: 6px;
             background: var(--accent);
             border-radius: 50%;
-            margin-top: 8px;
+            position: absolute;
+            left: 20px;
+            top: 22px;
         }
 
         /* ===================== */
@@ -844,27 +872,49 @@
             list-style: none;
             margin-top: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
 
         .explain-list li {
+            flex: 0 1 calc(50% - 8px);
+            min-width: 260px;
             font-size: 15px;
             color: var(--text-secondary);
-            line-height: 1.6;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            line-height: 1.65;
+            position: relative;
+            padding: 16px 20px 16px 44px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .explain-list li {
+                flex: 1 1 100%;
+            }
+        }
+
+        [data-theme="light"] .explain-list li {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .explain-list li:hover {
+            border-color: var(--border-light);
         }
 
         .explain-list li::before {
             content: '';
-            width: 6px;
-            height: 6px;
-            min-width: 6px;
+            position: absolute;
+            left: 20px;
+            top: 22px;
+            width: 8px;
+            height: 8px;
             background: var(--accent);
             border-radius: 50%;
-            margin-top: 8px;
+            opacity: 0.7;
         }
 
         /* ===================== */
@@ -889,12 +939,40 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             background: var(--bg-elevated);
-            transition: background 0.5s ease, border-color 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .two-col-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .two-col-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-light);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .two-col-item:hover::before {
+            opacity: 1;
         }
 
         [data-theme="light"] .two-col-item {
             background: #FFFFFF;
             border-color: var(--border-light);
+        }
+
+        [data-theme="light"] .two-col-item:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
         }
 
         .two-col-item h4 {
@@ -955,12 +1033,61 @@
             list-style: none;
             margin-top: 24px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
         }
 
         .capability-list li {
-            max-width: 56ch;
+            flex: 0 1 calc(50% - 12px);
+            min-width: 280px;
+            max-width: none;
+            padding: 32px 24px;
+            background: rgba(18, 17, 26, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .capability-list li {
+                flex: 1 1 100%;
+            }
+        }
+
+        .capability-list li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .capability-list li:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .capability-list li:hover::before {
+            opacity: 1;
+        }
+
+        [data-theme="light"] .capability-list li {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .capability-list li:hover {
+            border-color: rgba(0, 0, 0, 0.14);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
         }
 
         .capability-list li strong {
@@ -1282,7 +1409,6 @@
                         <li class="nav-dropdown">
                             <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
                             <div class="nav-dropdown-menu">
-                                <a href="products.html">Products Overview</a>
                                 <a href="product-ortb.html">oRTB Infrastructure</a>
                                 <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                                 <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
@@ -1307,7 +1433,7 @@
             <div class="hero-content">
                 <span class="hero-label">Prebid Server Infrastructure</span>
                 <h1>Server-Side Prebid Server Infrastructure, <em>Built for Scale</em></h1>
-                <p class="hero-sub">Floxis provides server-side Prebid Server infrastructure that enables publishers and ad networks to operate and control Prebid Server environments in production — designed for scale, performance, and long-term operational stability. This infrastructure allows teams to move auctions and monetization logic fully server-side while preserving ownership, transparency, and control across the stack.</p>
+                <p class="hero-sub">Floxis provides server-side Prebid Server infrastructure that enables publishers and ad networks to operate and control Prebid Server environments in production — designed for scale, performance, and long-term operational stability.</p>
                 <div class="hero-actions">
                     <a href="index.html#cta" class="btn btn-primary"><span>Request a Technical Overview</span></a>
                     <a href="#stack-fit" class="btn btn-ghost">
@@ -1324,25 +1450,25 @@
     <!-- What Floxis Provides -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Infrastructure</p>
                 <h2 class="section-title">What Floxis Provides</h2>
                 <p class="section-text">Floxis delivers the infrastructure required to operate Prebid Server reliably in high-volume, enterprise environments.</p>
-                <ul class="infra-list">
-                    <li>Server-side Prebid Server infrastructure</li>
-                    <li>Scalable request handling and execution</li>
-                    <li>Centralized pricing, routing, and governance logic</li>
-                    <li>Operational tooling for monitoring and control</li>
-                </ul>
-                <p class="small-line">Floxis does not replace ad servers, demand partners, or auction ownership. It provides the infrastructure layer required to run Prebid Server efficiently and safely.</p>
             </div>
+            <ul class="infra-list fade-in">
+                <li>Server-side Prebid Server infrastructure</li>
+                <li>Scalable request handling and execution</li>
+                <li>Centralized pricing, routing, and governance logic</li>
+                <li>Operational tooling for monitoring and control</li>
+            </ul>
+
         </div>
     </section>
 
     <!-- How It Fits Within the Stack -->
     <section class="page-section" id="stack-fit">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Stack Integration</p>
                 <h2 class="section-title">Fully Server-Side Execution, Cleanly Integrated</h2>
                 <p class="section-text">Floxis' Prebid Server infrastructure operates server-side, between demand integrations and the ad server, enabling auctions to execute outside the browser without disrupting existing stack ownership.</p>
@@ -1379,14 +1505,13 @@
             </div>
 
             <div class="fade-in">
-                <p class="section-text" style="margin-top: 0;">In this model:</p>
                 <ul class="explain-list">
                     <li>Demand partners integrate server-to-server</li>
                     <li>Prebid Server executes auctions at scale</li>
                     <li>Pricing and routing logic is handled server-side</li>
                     <li>The ad server retains final decision-making and delivery</li>
                 </ul>
-                <p class="small-line">This approach reduces client-side complexity while maintaining full transparency and control.</p>
+
             </div>
         </div>
     </section>
@@ -1395,7 +1520,7 @@
     <section class="page-section page-section--elevated">
         <div class="container">
             <div class="section-inner">
-                <div class="fade-in">
+                <div class="section-header fade-in">
                     <p class="section-label">Audience</p>
                     <h2 class="section-title">Who This Is For</h2>
                 </div>
@@ -1409,7 +1534,7 @@
                             <li>Centralize monetization logic server-side</li>
                             <li>Operate Prebid Server as long-term infrastructure</li>
                         </ul>
-                        <p class="col-closing">Floxis enables publishers to run Prebid Server as a stable, production-grade component of their stack.</p>
+
                     </div>
                     <div class="two-col-item">
                         <h4>Ad Networks &amp; Enterprise Platforms</h4>
@@ -1420,7 +1545,7 @@
                             <li>Govern pricing, routing, and traffic centrally</li>
                             <li>Support complex partner and demand setups</li>
                         </ul>
-                        <p class="col-closing">Floxis provides the foundation to operate Prebid Server infrastructure with enterprise-grade reliability.</p>
+
                     </div>
                 </div>
             </div>
@@ -1430,34 +1555,34 @@
     <!-- What This Enables -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <p class="section-label">Capabilities</p>
                 <h2 class="section-title">What This Enables</h2>
                 <p class="section-text">By operating Prebid Server infrastructure through Floxis, teams can enable:</p>
-                <ul class="capability-list">
-                    <li>
-                        <strong>Server-Side Auctions at Scale</strong>
-                        <span>Execute auctions efficiently without relying on client-side execution.</span>
-                    </li>
-                    <li>
-                        <strong>Centralized Pricing &amp; Governance</strong>
-                        <span>Apply consistent pricing and control logic across properties and demand.</span>
-                    </li>
-                    <li>
-                        <strong>Traffic Shaping &amp; Routing</strong>
-                        <span>Route and segment server-side traffic based on performance and business rules.</span>
-                    </li>
-                    <li>
-                        <strong>Supply Path Control (SPO)</strong>
-                        <span>Enforce preferred demand paths while preserving auction integrity.</span>
-                    </li>
-                    <li>
-                        <strong>Operational Efficiency</strong>
-                        <span>Reduce client-side overhead and improve predictability at scale.</span>
-                    </li>
-                </ul>
-                <p class="small-line">All capabilities are designed to operate cleanly within existing stacks.</p>
             </div>
+            <ul class="capability-list fade-in">
+                <li>
+                    <strong>Server-Side Auctions at Scale</strong>
+                    <span>Execute auctions efficiently without relying on client-side execution.</span>
+                </li>
+                <li>
+                    <strong>Centralized Pricing &amp; Governance</strong>
+                    <span>Apply consistent pricing and control logic across properties and demand.</span>
+                </li>
+                <li>
+                    <strong>Traffic Shaping &amp; Routing</strong>
+                    <span>Route and segment server-side traffic based on performance and business rules.</span>
+                </li>
+                <li>
+                    <strong>Supply Path Control (SPO)</strong>
+                    <span>Enforce preferred demand paths while preserving auction integrity.</span>
+                </li>
+                <li>
+                    <strong>Operational Efficiency</strong>
+                    <span>Reduce client-side overhead and improve predictability at scale.</span>
+                </li>
+            </ul>
+
         </div>
     </section>
 
@@ -1465,16 +1590,16 @@
     <section class="page-section page-section--elevated">
         <div class="container">
             <div class="section-inner">
-                <div class="fade-in">
+                <div class="section-header fade-in">
                     <h2 class="section-title">Safety, Quality &amp; Compatibility</h2>
-                    <p class="section-text">Floxis' Prebid Server infrastructure is built for environments where quality, performance, and compliance are critical.</p>
-                    <ul class="infra-list">
-                        <li>Compatible with IVT and brand safety tools (Confiant, GeoEdge, DoubleVerify)</li>
-                        <li>Does not bypass fraud detection, blocking, or enforcement</li>
-                        <li>Preserves auction transparency and reporting</li>
-                        <li>Operates entirely server-side with no client-side impact</li>
-                    </ul>
+
                 </div>
+                <ul class="infra-list fade-in">
+                    <li>Compatible with IVT and brand safety tools (Confiant, GeoEdge, DoubleVerify)</li>
+                    <li>Does not bypass fraud detection, blocking, or enforcement</li>
+                    <li>Preserves auction transparency and reporting</li>
+                    <li>Operates entirely server-side with no client-side impact</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -1482,16 +1607,16 @@
     <!-- Implementation -->
     <section class="page-section">
         <div class="container">
-            <div class="fade-in">
+            <div class="section-header fade-in">
                 <h2 class="section-title">Implementation &amp; Operational Readiness</h2>
-                <ul class="infra-list" style="margin-top: 20px;">
-                    <li>Designed for enterprise-scale traffic and demand</li>
-                    <li>Supports incremental rollout and validation</li>
-                    <li>Integrates with existing demand partners and ad servers</li>
-                    <li>Operated as infrastructure, not a managed black box</li>
-                </ul>
-                <p class="small-line">Floxis supports teams in deploying Prebid Server infrastructure with predictability and control.</p>
             </div>
+            <ul class="infra-list fade-in" style="margin-top: 20px;">
+                <li>Designed for enterprise-scale traffic and demand</li>
+                <li>Supports incremental rollout and validation</li>
+                <li>Integrates with existing demand partners and ad servers</li>
+                <li>Operated as infrastructure, not a managed black box</li>
+            </ul>
+
         </div>
     </section>
 

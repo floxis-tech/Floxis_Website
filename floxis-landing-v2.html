@@ -328,6 +328,82 @@
             transform-origin: left;
         }
 
+        /* Nav Dropdown */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-dropdown > a .dropdown-arrow {
+            width: 10px;
+            height: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover > a .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 240px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            transform: translateX(-50%) translateY(4px);
+            z-index: 200;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a::after {
+            display: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            color: var(--text-primary);
+            background: rgba(71, 235, 235, 0.08);
+        }
+
+        [data-theme="light"] .nav-dropdown-menu a:hover {
+            background: rgba(137, 82, 253, 0.08);
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -435,12 +511,26 @@
             border-radius: 100px;
             opacity: 0;
             animation: fadeUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            transition: color 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: default;
+        }
+
+        .hero-label:hover {
+            background: rgba(71, 235, 235, 0.15);
+            border-color: rgba(71, 235, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(71, 235, 235, 0.2);
         }
 
         [data-theme="light"] .hero-label {
             background: rgba(137, 82, 253, 0.08);
             border-color: rgba(137, 82, 253, 0.2);
+        }
+
+        [data-theme="light"] .hero-label:hover {
+            background: rgba(137, 82, 253, 0.15);
+            border-color: rgba(137, 82, 253, 0.4);
+            box-shadow: 0 8px 24px rgba(137, 82, 253, 0.2);
         }
 
         .hero-label::before {
@@ -1573,6 +1663,14 @@
                 <div class="nav-inner">
                     <a href="#" class="logo">FLOXIS</a>
                     <ul class="nav-links">
+                        <li class="nav-dropdown">
+                            <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
+                            <div class="nav-dropdown-menu">
+                                <a href="product-ortb.html">oRTB Infrastructure</a>
+                                <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
+                                <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
+                            </div>
+                        </li>
                         <li><a href="#stack">How It Works</a></li>
                         <li><a href="#values">Why Floxis</a></li>
                         <li><a href="#faq">FAQ</a></li>
