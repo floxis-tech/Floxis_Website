@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You — Floxis</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#07060D">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --cyan: #47EBEB;
-            --purple: #8952FD;
-            --gradient: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
-        }
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a0f;
-            color: #e0e0e0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,9 +22,7 @@
             text-align: center;
             padding: 24px;
         }
-        .card {
-            max-width: 520px;
-        }
+        .card { max-width: 520px; }
         .check {
             width: 64px;
             height: 64px;
@@ -38,41 +33,43 @@
             justify-content: center;
             margin-bottom: 24px;
         }
-        .check svg { width: 32px; height: 32px; stroke: #0a0a0f; }
+        .check svg { width: 32px; height: 32px; stroke: var(--bg); }
         h1 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 12px;
         }
         p {
-            color: #999;
+            color: var(--text-secondary);
             font-size: 1.05rem;
             line-height: 1.6;
             margin-bottom: 32px;
         }
-        a {
+        .home-link {
             display: inline-block;
             padding: 12px 28px;
             background: var(--gradient);
-            color: #0a0a0f;
+            color: var(--bg);
             font-weight: 600;
             border-radius: 10px;
             text-decoration: none;
             transition: opacity 0.2s;
         }
-        a:hover { opacity: 0.85; }
+        .home-link:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="check">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 13l4 4L19 7"/>
-            </svg>
+    <main id="main">
+        <div class="card">
+            <div class="check">
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <h1>Thank You!</h1>
+            <p>Your message has been received. Our team will get back to you at the email you provided shortly.</p>
+            <a href="/" class="home-link">Back to Home</a>
         </div>
-        <h1>Thank You!</h1>
-        <p>Your message has been received. Our team will get back to you at the email you provided shortly.</p>
-        <a href="/">Back to Home</a>
-    </div>
+    </main>
 </body>
 </html>

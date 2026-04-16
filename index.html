@@ -4,76 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floxis — Server-Side Infrastructure for Publisher-Controlled Monetization</title>
+    <meta name="description" content="Publisher-owned server-side ad infrastructure for oRTB, Prebid.js, and Prebid Server. Zero latency, no lock-in, full control over demand and routing.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#07060D">
+    <link rel="canonical" href="https://floxis.tech/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Floxis">
+    <meta property="og:title" content="Floxis — Server-Side Infrastructure for Publisher-Controlled Monetization">
+    <meta property="og:description" content="Publisher-owned server-side ad infrastructure for oRTB, Prebid.js, and Prebid Server. Zero latency, no lock-in, full control over demand and routing.">
+    <meta property="og:url" content="https://floxis.tech/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Floxis — Server-Side Infrastructure for Publisher-Controlled Monetization">
+    <meta name="twitter:description" content="Publisher-owned server-side ad infrastructure for oRTB, Prebid.js, and Prebid Server. Zero latency, no lock-in, full control over demand and routing.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://formsubmit.co">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            /* Brand Colors from Floxis Brand Guide */
-            --cyan: #47EBEB;
-            --cyan-light: #87FFFF;
-            --cyan-dark: #00B8B9;
-            --purple: #8952FD;
-            --purple-light: #9F75F9;
-            --purple-dark: #632CDA;
-
-            /* Gradient */
-            --gradient: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
-            --glow-cyan: rgba(71, 235, 235, 0.15);
-            --glow-purple: rgba(137, 82, 253, 0.15);
-        }
-
-        /* Dark Theme (Default) */
-        [data-theme="dark"] {
-            --bg: #07060D;
-            --bg-elevated: #0E0D15;
-            --bg-card: #12111A;
-            --text-primary: #FFFFFF;
-            --text-secondary: #94949E;
-            --text-dim: #5C5C66;
-            --border: rgba(255, 255, 255, 0.06);
-            --border-light: rgba(255, 255, 255, 0.12);
-            --nav-bg: rgba(7, 6, 13, 0.92);
-            --card-bg: #12111A;
-            --input-bg: #07060D;
-        }
-
-        /* Light Theme (kept for future use - toggle removed, always dark) */
-        [data-theme="light"] {
-            --bg: #FFFFFF;
-            --bg-elevated: #F8F7F4;
-            --bg-card: #FFFFFF;
-            --text-primary: #1A1A1A;
-            --text-secondary: #666666;
-            --text-dim: #999999;
-            --border: rgba(0, 0, 0, 0.08);
-            --border-light: rgba(0, 0, 0, 0.12);
-            --nav-bg: rgba(255, 255, 255, 0.92);
-            --card-bg: #FFFFFF;
-            --input-bg: #F5F5F5;
-            --glow-cyan: rgba(71, 235, 235, 0.25);
-            --glow-purple: rgba(137, 82, 253, 0.2);
-            --accent: #8952FD;
-            --accent-light: #9F75F9;
-            --gradient-text: linear-gradient(135deg, #632CDA 0%, #47EBEB 100%);
-        }
-
-        [data-theme="dark"] {
-            --accent: #47EBEB;
-            --accent-light: #87FFFF;
-            --gradient-text: linear-gradient(135deg, #47EBEB 0%, #8952FD 100%);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
@@ -85,337 +33,11 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
-        ::selection {
-            background: var(--accent);
-            color: var(--bg);
-        }
-
         /* Background Effects - Subtle grid for "axis" concept */
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.5;
-            transition: opacity 0.5s ease;
-        }
-
-        [data-theme="light"] .bg-grid {
-            opacity: 0.3;
-        }
-
-        .bg-glow {
-            position: fixed;
-            top: -20%;
-            left: 30%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(ellipse at center, var(--glow-purple) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.7;
-            transition: opacity 0.5s ease;
-        }
-
-        .bg-glow-cyan {
-            position: fixed;
-            bottom: -20%;
-            right: 20%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(ellipse at center, var(--glow-cyan) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.5;
-            transition: opacity 0.5s ease;
-        }
-
-        [data-theme="light"] .bg-glow,
-        [data-theme="light"] .bg-glow-cyan {
-            opacity: 0.4;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 48px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 24px;
-            }
-        }
 
         /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 20px 0;
-            transition: all 0.6s ease;
-        }
-
-        nav.scrolled {
-            padding: 16px 0;
-        }
-
-        .nav-wrapper {
-            max-width: 100%;
-            margin: 0 auto;
-            background: transparent;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            border: 1px solid transparent;
-            border-radius: 0;
-            padding: 12px 0;
-            transition: all 0.6s ease;
-        }
-
-        nav.scrolled .nav-wrapper {
-            max-width: 1000px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 24px;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
-        }
-
-        .theme-toggle:hover {
-            border-color: var(--border-light);
-            color: var(--text-primary);
-            background: var(--bg-elevated);
-        }
-
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .theme-toggle:hover svg {
-            transform: rotate(15deg);
-        }
-
-        .theme-toggle .sun-icon {
-            display: none;
-        }
-
-        .theme-toggle .moon-icon {
-            display: block;
-        }
-
-        [data-theme="light"] .theme-toggle .sun-icon {
-            display: block;
-        }
-
-        [data-theme="light"] .theme-toggle .moon-icon {
-            display: none;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .nav-cta {
-            transition: all 0.6s ease;
-        }
-
-        nav.scrolled .nav-cta {
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 13px;
-        }
-
-        .logo {
-            font-family: 'Inter', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.6s ease;
-        }
-
-        .logo:hover {
-            color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 36px;
-            list-style: none;
-            transition: gap 0.6s ease;
-        }
-
-        nav.scrolled .nav-links {
-            gap: 28px;
-        }
-
-        .nav-links li {
-            position: relative;
-        }
-
-        .nav-links a {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 8px 0;
-            display: inline-block;
-            position: relative;
-            transition: all 0.3s ease;
-            letter-spacing: 0.02em;
-        }
-
-        nav.scrolled .nav-links a {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-links a:hover::after {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
 
         /* Nav Dropdown */
-        .nav-dropdown {
-            position: relative;
-        }
-
-        .nav-dropdown > a {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-dropdown > a .dropdown-arrow {
-            width: 10px;
-            height: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-dropdown:hover > a .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        .nav-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 240px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-            transform: translateX(-50%) translateY(4px);
-            z-index: 200;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        [data-theme="light"] .nav-dropdown-menu {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-dropdown:hover .nav-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .nav-dropdown-menu a {
-            display: block;
-            padding: 10px 14px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .nav-dropdown-menu a::after {
-            display: none;
-        }
-
-        .nav-dropdown-menu a:hover {
-            color: var(--text-primary);
-            background: rgba(71, 235, 235, 0.08);
-        }
-
-        [data-theme="light"] .nav-dropdown-menu a:hover {
-            background: rgba(137, 82, 253, 0.08);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-            cursor: pointer;
-            border: none;
-        }
 
         .btn-primary {
             background: var(--gradient);
@@ -425,53 +47,6 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        [data-theme="light"] .btn-primary {
-            background: linear-gradient(135deg, #8952FD 0%, #47EBEB 100%);
-        }
-
-        .btn-primary span {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px var(--glow-cyan), 0 4px 16px var(--glow-purple);
-        }
-
-        [data-theme="light"] .btn-primary:hover {
-            background: linear-gradient(135deg, #632CDA 0%, #00B8B9 100%);
-            box-shadow: 0 8px 32px var(--glow-purple), 0 4px 16px var(--glow-cyan);
-        }
-
-        .btn-ghost {
-            color: var(--text-secondary);
-            padding: 12px 0;
-            position: relative;
-        }
-
-        .btn-ghost::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .btn-ghost:hover {
-            color: var(--accent);
-        }
-
-        .btn-ghost:hover::after {
-            width: 100%;
         }
 
         .btn-ghost svg {
@@ -520,31 +95,6 @@
             border-color: rgba(71, 235, 235, 0.4);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(71, 235, 235, 0.2);
-        }
-
-        [data-theme="light"] .hero-label {
-            background: rgba(137, 82, 253, 0.08);
-            border-color: rgba(137, 82, 253, 0.2);
-        }
-
-        [data-theme="light"] .hero-label:hover {
-            background: rgba(137, 82, 253, 0.15);
-            border-color: rgba(137, 82, 253, 0.4);
-            box-shadow: 0 8px 24px rgba(137, 82, 253, 0.2);
-        }
-
-        .hero-label::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
         }
 
         .hero h1 {
@@ -712,7 +262,7 @@
             }
         }
 
-        .stack-callout h4 {
+        .stack-callout h3 {
             font-family: 'Inter', sans-serif;
             font-size: 22px;
             font-weight: 700;
@@ -825,16 +375,17 @@
             }
         }
 
-        .stack-layer h5 {
+        .stack-layer-title {
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 2px;
             letter-spacing: 0.03em;
+            display: block;
         }
 
-        .stack-layer.floxis h5 {
+        .stack-layer.floxis .stack-layer-title {
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -964,12 +515,6 @@
             pointer-events: none;
         }
 
-        [data-theme="light"] .capabilities-section::before {
-            background:
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(137, 82, 253, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(71, 235, 235, 0.1) 0%, transparent 50%);
-        }
-
         .capabilities-intro {
             max-width: 700px;
             margin: 0 auto 56px;
@@ -1026,21 +571,10 @@
             box-sizing: border-box;
         }
 
-        [data-theme="light"] .capability-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-        }
-
         .capability-card:hover {
             transform: translateY(-4px);
             border-color: rgba(71, 235, 235, 0.3);
             box-shadow: 0 16px 48px rgba(71, 235, 235, 0.12), 0 8px 24px rgba(137, 82, 253, 0.08);
-        }
-
-        [data-theme="light"] .capability-card:hover {
-            border-color: rgba(137, 82, 253, 0.25);
-            box-shadow: 0 16px 48px rgba(137, 82, 253, 0.1);
         }
 
         .capability-card-header {
@@ -1063,21 +597,10 @@
             transition: all 0.3s ease;
         }
 
-        [data-theme="light"] .capability-icon {
-            background: rgba(137, 82, 253, 0.08);
-            border-color: rgba(137, 82, 253, 0.2);
-            color: var(--purple);
-        }
-
         .capability-card:hover .capability-icon {
             background: rgba(71, 235, 235, 0.15);
             border-color: rgba(71, 235, 235, 0.35);
             transform: scale(1.05);
-        }
-
-        [data-theme="light"] .capability-card:hover .capability-icon {
-            background: rgba(137, 82, 253, 0.12);
-            border-color: rgba(137, 82, 253, 0.35);
         }
 
         .capability-icon svg {
@@ -1091,7 +614,7 @@
             flex-direction: column;
         }
 
-        .capability-card h4 {
+        .capability-card h3 {
             font-family: 'Inter', sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -1147,7 +670,7 @@
             }
         }
 
-        .cta-text h3 {
+        .cta-text h2 {
             font-family: 'Inter', sans-serif;
             font-size: clamp(32px, 4vw, 44px);
             font-weight: 700;
@@ -1193,10 +716,6 @@
             position: relative;
             overflow: hidden;
             transition: background 0.5s ease, border-color 0.5s ease;
-        }
-
-        [data-theme="light"] .contact-form-wrapper {
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
         }
 
         .contact-form-wrapper::before {
@@ -1279,10 +798,6 @@
             transition: background 0.5s ease;
         }
 
-        [data-theme="light"] .audience-section {
-            background: #F8F7F4;
-        }
-
         .audience-section::before {
             content: '';
             position: absolute;
@@ -1318,12 +833,6 @@
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        [data-theme="light"] .audience-card {
-            background: #FFFFFF;
-            border-color: rgba(0, 0, 0, 0.08);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        }
-
         /* Gradient top border */
         .audience-card::before {
             content: '';
@@ -1343,15 +852,11 @@
             box-shadow: 0 16px 48px rgba(137, 82, 253, 0.12);
         }
 
-        [data-theme="light"] .audience-card:hover {
-            box-shadow: 0 16px 48px rgba(137, 82, 253, 0.1);
-        }
-
         .audience-card:hover::before {
             opacity: 1;
         }
 
-        .audience-card h4 {
+        .audience-card h3 {
             font-family: 'Inter', sans-serif;
             font-size: 26px;
             font-weight: 700;
@@ -1379,203 +884,16 @@
         }
 
         /* Footer */
-        footer {
-            padding: 100px 0 0 0;
-            background: var(--bg);
-            position: relative;
-            overflow: hidden;
-            transition: background 0.5s ease;
-        }
 
         /* Subtle cross/plus pattern background */
-        footer::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at center, var(--text-dim) 1px, transparent 1px);
-            background-size: 48px 48px;
-            opacity: 0.15;
-            pointer-events: none;
-        }
-
-        [data-theme="light"] footer::before {
-            opacity: 0.25;
-        }
-
-        .footer-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .footer-main {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 80px;
-            align-items: end;
-            padding-bottom: 60px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        @media (max-width: 900px) {
-            .footer-main {
-                grid-template-columns: 1fr;
-                gap: 48px;
-            }
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 48px;
-        }
-
-        @media (max-width: 768px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 36px;
-            }
-        }
-
-        .footer-col {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .footer-col-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            margin-bottom: 4px;
-        }
-
-        .footer-col a {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            width: fit-content;
-        }
-
-        .footer-col a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .footer-col a:hover {
-            color: var(--accent);
-        }
-
-        .footer-col a:hover::after {
-            width: 100%;
-        }
 
         /* Large logo section */
-        .footer-brand {
-            position: relative;
-        }
-
-        .footer-logo-large {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(64px, 12vw, 140px);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 0.85;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            opacity: 0.9;
-            user-select: none;
-        }
-
-        @media (max-width: 900px) {
-            .footer-brand {
-                order: -1;
-            }
-        }
 
         /* Bottom bar with ticker */
-        .footer-bottom {
-            border-top: 1px solid var(--border);
-            padding: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        .footer-copy {
-            font-size: 13px;
-            color: var(--text-dim);
-        }
-
-        .footer-ticker {
-            flex: 1;
-            overflow: hidden;
-            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-        }
-
-        .footer-ticker-inner {
-            display: flex;
-            gap: 32px;
-            animation: ticker 30s linear infinite;
-            white-space: nowrap;
-        }
-
-        .footer-ticker-inner span {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
 
         .footer-ticker-inner span::after {
             content: '•';
             color: var(--accent);
-        }
-
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-legal a {
-            font-size: 12px;
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-legal a:hover {
-            color: var(--text-primary);
         }
 
         /* Mobile nav */
@@ -1613,17 +931,13 @@
                         transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .fade-in:nth-child(1) { transition-delay: 0s; }
         .fade-in:nth-child(2) { transition-delay: 0.1s; }
         .fade-in:nth-child(3) { transition-delay: 0.2s; }
     </style>
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
     <div class="bg-glow-cyan"></div>
@@ -1636,9 +950,9 @@
                     <a href="#" class="logo">FLOXIS</a>
                     <ul class="nav-links">
                         <li class="nav-dropdown">
-                            <a href="products.html">Product <svg class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
+                            <a href="products.html">Product <svg aria-hidden="true" focusable="false" class="dropdown-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l3 3 3-3"/></svg></a>
                             <div class="nav-dropdown-menu">
-                                <a href="product-ortb.html">oRTB Infrastructure</a>
+                                <a href="product-rtb.html">RTB Infrastructure</a>
                                 <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                                 <a href="product-prebid-server.html">Prebid Server Infrastructure</a>
                             </div>
@@ -1658,25 +972,27 @@
         </div>
     </nav>
 
+    <main id="main">
+
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" aria-labelledby="hero-title">
         <div class="container">
             <div class="hero-content">
                 <span class="hero-label">Server-Side Infrastructure</span>
-                <h1>Server-Side Infrastructure for <em>Publisher-Controlled</em> Monetization</h1>
+                <h1 id="hero-title">Server-Side Infrastructure for <em>Publisher-Controlled</em> Monetization</h1>
                 <p class="hero-sub">Activate and monetize demand within your existing ad stack — without disrupting auctions or control.</p>
                 <div class="hero-ctas">
                     <a href="#cta" class="btn btn-primary">
                         <span>
                             Request a Technical Overview
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                 <path d="M2 7h10M8 3l4 4-4 4"/>
                             </svg>
                         </span>
                     </a>
                     <a href="#stack" class="btn btn-ghost">
                         See how Floxis fits your stack
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
                             <path d="M2 7h10M8 3l4 4-4 4"/>
                         </svg>
                     </a>
@@ -1691,22 +1007,22 @@
     </section>
 
     <!-- Stack Section -->
-    <section class="stack-section" id="stack">
+    <section class="stack-section" id="stack" aria-labelledby="stack-title">
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">How It Works</p>
-                <h2 class="section-title">Where Floxis Sits in Your Stack</h2>
+                <h2 id="stack-title" class="section-title">Where Floxis Sits in Your Stack</h2>
             </div>
 
             <div class="stack-layout">
                 <div class="stack-callout left fade-in">
-                    <h4>Your Stack. Your Demand. Your Rules.</h4>
+                    <h3>Your Stack. Your Demand. Your Rules.</h3>
                     <p>Floxis works within your existing setup and respects your priorities, relationships, and controls.</p>
                 </div>
 
                 <div class="stack-diagram fade-in">
                     <div class="stack-layer">
-                        <h5>Demand Partners</h5>
+                        <span class="stack-layer-title">Demand Partners</span>
                         <span>SSPs, DSPs, Direct Demand</span>
                     </div>
 
@@ -1716,7 +1032,7 @@
                     </div>
 
                     <div class="stack-layer floxis">
-                        <h5>FLOXIS</h5>
+                        <span class="stack-layer-title">FLOXIS</span>
                         <span>Server-Side Infrastructure</span>
                     </div>
 
@@ -1726,7 +1042,7 @@
                     </div>
 
                     <div class="stack-layer">
-                        <h5>Ad Server</h5>
+                        <span class="stack-layer-title">Ad Server</span>
                         <span>Google Ad Manager</span>
                     </div>
 
@@ -1735,7 +1051,7 @@
                     </div>
 
                     <div class="stack-layer">
-                        <h5>Publisher Inventory</h5>
+                        <span class="stack-layer-title">Publisher Inventory</span>
                         <span>Your Properties</span>
                     </div>
 
@@ -1745,7 +1061,7 @@
                 </div>
 
                 <div class="stack-callout fade-in">
-                    <h4>No Auction Interference</h4>
+                    <h3>No Auction Interference</h3>
                     <p>Floxis does not override auction logic, pricing, or demand ownership.</p>
                 </div>
             </div>
@@ -1753,11 +1069,11 @@
     </section>
 
     <!-- Capabilities Section -->
-    <section class="capabilities-section" id="values">
+    <section class="capabilities-section" id="values" aria-labelledby="values-title">
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">Why Floxis</p>
-                <h2 class="section-title">What the Infrastructure Enables</h2>
+                <h2 id="values-title" class="section-title">What the Infrastructure Enables</h2>
             </div>
 
             <div class="capabilities-intro fade-in">
@@ -1768,13 +1084,13 @@
                 <div class="capability-card">
                     <div class="capability-card-header">
                         <div class="capability-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
                             </svg>
                         </div>
                     </div>
                     <div class="capability-content">
-                        <h4>Supply Path Control (SPO)</h4>
+                        <h3>Supply Path Control (SPO)</h3>
                         <p>Define and enforce preferred demand paths without interfering with auction logic.</p>
                     </div>
                 </div>
@@ -1782,14 +1098,14 @@
                 <div class="capability-card">
                     <div class="capability-card-header">
                         <div class="capability-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="12" y1="1" x2="12" y2="23"/>
                                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                             </svg>
                         </div>
                     </div>
                     <div class="capability-content">
-                        <h4>Pricing & Floor Control</h4>
+                        <h3>Pricing & Floor Control</h3>
                         <p>Set and manage pricing rules across demand while preserving full auction transparency.</p>
                     </div>
                 </div>
@@ -1797,13 +1113,13 @@
                 <div class="capability-card">
                     <div class="capability-card-header">
                         <div class="capability-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                             </svg>
                         </div>
                     </div>
                     <div class="capability-content">
-                        <h4>Traffic Shaping & Routing</h4>
+                        <h3>Traffic Shaping & Routing</h3>
                         <p>Shape, segment, and route traffic server-side based on business and performance rules you control.</p>
                     </div>
                 </div>
@@ -1811,7 +1127,7 @@
                 <div class="capability-card">
                     <div class="capability-card-header">
                         <div class="capability-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                                 <line x1="3" y1="9" x2="21" y2="9"/>
                                 <line x1="9" y1="21" x2="9" y2="9"/>
@@ -1819,7 +1135,7 @@
                         </div>
                     </div>
                     <div class="capability-content">
-                        <h4>QPS Management</h4>
+                        <h3>QPS Management</h3>
                         <p>Control query volume and request throttling to optimize efficiency and reduce wasted spend.</p>
                     </div>
                 </div>
@@ -1827,13 +1143,13 @@
                 <div class="capability-card">
                     <div class="capability-card-header">
                         <div class="capability-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
                             </svg>
                         </div>
                     </div>
                     <div class="capability-content">
-                        <h4>Controlled Experimentation</h4>
+                        <h3>Controlled Experimentation</h3>
                         <p>Test pricing, routing, and demand strategies safely within your existing stack.</p>
                     </div>
                 </div>
@@ -1846,39 +1162,39 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="audience-section" id="faq">
+    <section class="audience-section" id="faq" aria-labelledby="faq-title">
         <div class="container">
             <div class="section-header fade-in">
                 <p class="section-label">FAQ</p>
-                <h2 class="section-title">Who Is Floxis For?</h2>
+                <h2 id="faq-title" class="section-title">Who Is Floxis For?</h2>
             </div>
             <div class="audience-grid">
                 <div class="audience-card fade-in">
-                    <h4>Publishers</h4>
+                    <h3>Publishers</h3>
                     <p>Unlock incremental server-side demand without replacing your existing stack or workflows. Maintain full control over your monetization strategy.</p>
                     <a href="#cta" class="btn btn-ghost">
                         <span>Schedule a Consultation</span>
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                             <path d="M2 7h10M8 3l4 4-4 4"/>
                         </svg>
                     </a>
                 </div>
                 <div class="audience-card fade-in">
-                    <h4>Agencies</h4>
+                    <h3>Agencies</h3>
                     <p>Activate server-side bidding for clients without introducing operational risk or complexity. Seamless integration with existing tech stacks.</p>
                     <a href="#cta" class="btn btn-ghost">
                         <span>Get in Touch</span>
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                             <path d="M2 7h10M8 3l4 4-4 4"/>
                         </svg>
                     </a>
                 </div>
                 <div class="audience-card fade-in">
-                    <h4>Ad Networks</h4>
+                    <h3>Ad Networks</h3>
                     <p>Expand demand access and yield while maintaining full control over integrations and trade logic. No vendor lock-in. Test without commitment.</p>
                     <a href="#cta" class="btn btn-ghost">
                         <span>Talk to Us</span>
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                             <path d="M2 7h10M8 3l4 4-4 4"/>
                         </svg>
                     </a>
@@ -1888,31 +1204,31 @@
     </section>
 
     <!-- CTA & Contact Section -->
-    <section class="cta-section" id="cta">
+    <section class="cta-section" id="cta" aria-labelledby="cta-title">
         <div class="container">
             <div class="cta-content-wrapper fade-in">
                 <div class="cta-text">
                     <p class="section-label">Get Started</p>
-                    <h3>Ready to see how Floxis fits your stack?</h3>
+                    <h2 id="cta-title">Ready to see how Floxis fits your stack?</h2>
                     <p class="cta-description">Test live! Results available almost in real-time, depend on setup and demand conditions.</p>
 
                     <div class="cta-features">
                         <div class="cta-feature">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                 <polyline points="22 4 12 14.01 9 11.01"/>
                             </svg>
                             <span>No commitment required</span>
                         </div>
                         <div class="cta-feature">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                 <polyline points="22 4 12 14.01 9 11.01"/>
                             </svg>
                             <span>Technical overview call</span>
                         </div>
                         <div class="cta-feature">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feature-icon">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                                 <polyline points="22 4 12 14.01 9 11.01"/>
                             </svg>
@@ -1932,15 +1248,15 @@
                         <input type="hidden" name="_next" value="https://floxis.tech/thanks.html">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                            <input type="text" id="name" name="name" placeholder="Your name" required aria-required="true" autocomplete="name">
                         </div>
                         <div class="form-group">
                             <label for="email">Work Email</label>
-                            <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                            <input type="email" id="email" name="email" placeholder="you@company.com" required aria-required="true" autocomplete="email">
                         </div>
                         <div class="form-group">
                             <label for="company">Company</label>
-                            <input type="text" id="company" name="company" placeholder="Your company">
+                            <input type="text" id="company" name="company" placeholder="Your company" autocomplete="organization">
                         </div>
                         <div class="form-group">
                             <label for="message">Message <span class="optional">(Optional)</span></label>
@@ -1949,7 +1265,7 @@
                         <button type="submit" class="btn btn-primary btn-submit">
                             <span>
                                 Request Technical Overview
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                     <path d="M2 7h10M8 3l4 4-4 4"/>
                                 </svg>
                             </span>
@@ -1959,6 +1275,8 @@
             </div>
         </div>
     </section>
+
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -1976,7 +1294,7 @@
                         <div class="footer-col">
                             <span class="footer-col-label">Product</span>
                             <a href="products.html">Products Overview</a>
-                            <a href="product-ortb.html">oRTB Infrastructure</a>
+                            <a href="product-rtb.html">RTB Infrastructure</a>
                             <a href="product-prebidjs.html">Prebid.js Infrastructure</a>
                             <a href="product-prebid-server.html">Prebid Server</a>
                         </div>
@@ -1996,7 +1314,7 @@
 
                 <!-- Bottom bar -->
                 <div class="footer-bottom">
-                    <p class="footer-copy">© 2026 Floxis. All rights reserved.</p>
+                    <p class="footer-copy">&copy; 2026 Floxis. All rights reserved.</p>
                     <div class="footer-ticker">
                         <div class="footer-ticker-inner">
                             <span>Server-Side Infrastructure</span>
@@ -2012,7 +1330,7 @@
                         </div>
                     </div>
                     <div class="footer-legal">
-                        <a href="#">Privacy</a>
+                        <a href="privacy.html">Privacy</a>
                         <a href="#">Terms</a>
                     </div>
                 </div>
@@ -2021,28 +1339,11 @@
     </footer>
 
     <script>
-        /* Theme toggle (disabled - dark mode only)
-        const themeToggle = document.getElementById('themeToggle');
-        const html = document.documentElement;
-
-        const savedTheme = localStorage.getItem('floxis-theme');
-        if (savedTheme) {
-            html.setAttribute('data-theme', savedTheme);
-        }
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('floxis-theme', newTheme);
-        });
-        */
-
         // Nav scroll effect
         const nav = document.getElementById('nav');
         window.addEventListener('scroll', () => {
             nav.classList.toggle('scrolled', window.scrollY > 50);
-        });
+        }, { passive: true });
 
         // Scroll reveal animations
         const observerOptions = {
@@ -2080,13 +1381,30 @@
         if (contactForm) {
             const emailInput = contactForm.querySelector('#email');
             const replyTo = contactForm.querySelector('[name="_replyto"]');
-            emailInput.addEventListener('input', () => { replyTo.value = emailInput.value; });
+            if (emailInput && replyTo) {
+                emailInput.addEventListener('input', () => { replyTo.value = emailInput.value; });
+            }
+
+            // Set _next redirect to the current origin so staging/preview deploys
+            // land on their own thank-you page rather than the production domain.
+            // Falls back to production when origin is unavailable (e.g. file://).
+            const nextInput = contactForm.querySelector('[name="_next"]');
+            if (nextInput) {
+                const origin = window.location.origin && window.location.origin !== 'null'
+                    ? window.location.origin
+                    : 'https://floxis.tech';
+                nextInput.value = origin + '/thanks.html';
+            }
 
             contactForm.addEventListener('submit', function() {
-                replyTo.value = emailInput.value;
+                if (emailInput && replyTo) {
+                    replyTo.value = emailInput.value;
+                }
                 const submitBtn = contactForm.querySelector('.btn-submit');
-                submitBtn.innerHTML = '<span>Sending...</span>';
-                submitBtn.disabled = true;
+                if (submitBtn) {
+                    submitBtn.textContent = 'Sending...';
+                    submitBtn.disabled = true;
+                }
             });
         }
     </script>
